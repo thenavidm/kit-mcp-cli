@@ -1,0 +1,14 @@
+{
+  "source": "https://developers.kit.com/api-reference/v4.json",
+  "checked": "2026-10-02",
+  "apiVersion": "4.0",
+  "sha256": "1101b4030f5960534c6e81f2f13c19a2a54650c09c4f819d19748a766da94148",
+  "operationCount": 83,
+  "corrections": [
+    "Broadcast create/update required-field lists conflict with draft/template creation and partial-update documentation. Create requires subject plus content or email_template_id; update accepts a nonempty partial body.",
+    "Broadcast allow_starting_point is described by the official content field but absent from properties. It is included as a reviewed boolean extension; runtime support still needs a live-account write check.",
+    "Broadcast update send_at supports null when returning to a draft; thumbnail fields are typed string-or-null. The generated GET broadcast parameter named [] is omitted as a malformed documentation entry.",
+    "Untag-by-email adds the required email_address query parameter described by the official operation but missing from its parameter list.",
+    "Path IDs are positive integers or digit strings. Tool names and generic id parameters use resource-specific names; search_subscribers remains a compatibility alias."
+  ]
+}

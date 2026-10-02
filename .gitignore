@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+coverage/
+desktop-extension/build*/
+desktop-extension/*.mcpb
+*.tgz
+
+# Private account files never belong in source/history.
+*tokens*.json
+*accounts*.json
+cookies*.json
+.sessions/
+secrets/

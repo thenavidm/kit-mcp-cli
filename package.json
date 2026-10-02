@@ -1,0 +1,97 @@
+{
+  "name": "@thenavidm/kit-mcp-cli",
+  "version": "2.0.0",
+  "description": "Kit MCP server and CLI for Claude Code and AI agents. Subscribers, tags, broadcasts, sequences, email stats, forms, snippets, purchases, webhooks, bulk operations and API v4.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "kit-mcp": "dist/index.js",
+    "kit-cli": "dist/index.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build",
+    "build:mcpb": "bash desktop-extension/build.sh",
+    "check:counts": "node scripts/check-counts.mjs",
+    "sync:api": "node scripts/sync-openapi.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.31.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@anthropic-ai/mcpb": "2.1.2",
+    "@types/node": "^22.10.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
+  },
+  "license": "AGPL-3.0-or-later",
+  "author": "Navid Moazzez (https://navid.me)",
+  "homepage": "https://navid.me/mcp-servers/kit",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thenavidm/kit-mcp-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thenavidm/kit-mcp-cli/issues"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "INSTALL.md",
+    "SKILL.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "licenses",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "COMPARISON.md",
+    "CONTRIBUTING.md"
+  ],
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "cli",
+    "command-line-tool",
+    "kit",
+    "convertkit",
+    "email-marketing",
+    "newsletter",
+    "email-automation",
+    "subscribers",
+    "broadcasts",
+    "claude-code",
+    "claude-desktop",
+    "codex",
+    "cursor",
+    "ai-agents",
+    "typescript",
+    "desktop-extension",
+    "api-v4",
+    "tags",
+    "sequences",
+    "forms",
+    "email-analytics",
+    "bulk-operations",
+    "webhooks",
+    "oauth2",
+    "gemini-cli",
+    "windsurf",
+    "open-source"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "overrides": {
+    "tmp": "^0.2.7"
+  }
+}

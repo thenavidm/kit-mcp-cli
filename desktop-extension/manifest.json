@@ -1,0 +1,86 @@
+{
+  "manifest_version": "0.2",
+  "name": "kit",
+  "display_name": "Kit",
+  "version": "2.0.0",
+  "description": "Kit MCP server with 85 tools for newsletters, subscribers, tags, sequences, statistics, forms, snippets, bulk operations and webhooks.",
+  "long_description": "Requires eligible Kit API v4 access. Enter a v4 API key for personal automation or a private authorized OAuth token-file path for full endpoint eligibility. Audience/delivery/deletion changes require confirmation. Read-only exposes 38 reads. Credentials are never bundled. The same tools are available through kit-cli.",
+  "author": {
+    "name": "Navid Moazzez",
+    "url": "https://navid.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thenavidm/kit-mcp-cli"
+  },
+  "homepage": "https://github.com/thenavidm/kit-mcp-cli",
+  "documentation": "https://github.com/thenavidm/kit-mcp-cli/blob/main/INSTALL.md",
+  "support": "https://github.com/thenavidm/kit-mcp-cli/issues",
+  "license": "AGPL-3.0-or-later",
+  "keywords": [
+    "kit",
+    "convertkit",
+    "email-marketing",
+    "newsletter",
+    "subscribers",
+    "broadcasts",
+    "mcp",
+    "cli",
+    "claude-desktop"
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/server/index.js"
+      ],
+      "env": {
+        "KIT_API_KEY": "${user_config.api_key}",
+        "KIT_TOKENS_FILE": "${user_config.tokens_file}",
+        "KIT_READ_ONLY": "${user_config.read_only}",
+        "KIT_ALLOW_DESTRUCTIVE": "${user_config.allow_destructive}"
+      }
+    }
+  },
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "title": "Kit v4 API key",
+      "description": "Personal v4 key from Kit Developer settings. Leave empty when using an OAuth file. Never a v3 secret or account password.",
+      "required": false,
+      "sensitive": true
+    },
+    "tokens_file": {
+      "type": "string",
+      "title": "Private OAuth token file",
+      "description": "Optional absolute path to your regular private authorized Kit OAuth JSON. Required for OAuth-only bulk/purchases; never bundle the file.",
+      "required": false
+    },
+    "read_only": {
+      "type": "boolean",
+      "title": "Read only",
+      "description": "Hide/refuse all 47 writes, leaving 38 reads.",
+      "default": false,
+      "required": false
+    },
+    "allow_destructive": {
+      "type": "boolean",
+      "title": "Allow confirmed audience and delivery changes",
+      "description": "If disabled, refuse the 40 guarded operations even when confirmed.",
+      "default": true,
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
+    "runtimes": {
+      "node": ">=22"
+    }
+  }
+}
