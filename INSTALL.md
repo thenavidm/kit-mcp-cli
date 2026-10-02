@@ -64,7 +64,7 @@ Authorization uses https://api.kit.com/v4/oauth/authorize and exchange/refresh u
 {"access_token":"YOUR_ACCESS_TOKEN","refresh_token":"YOUR_REFRESH_TOKEN","client_id":"YOUR_APP_ID","client_secret":"YOUR_APP_SECRET","created_at":1790899200,"expires_in":7200}
 ```
 
-Use issued timestamps/expiry, not these sample numbers. Set KIT_TOKENS_FILE to its absolute path. Limit the file to your OS user (0600 on POSIX, user-only folder/file ACLs on Windows). The reader refuses symlinks and files above 64 KB. Refresh writes atomically at mode 0600. Read [authentication and accounts](./README.md#6-authentication-and-accounts) for environment-token alternatives, refresh failures and precedence. No fine-grained OAuth scope claims are inferred from schema labels.
+Use issued timestamps/expiry, not these sample numbers. Set KIT_TOKENS_FILE to its absolute path. Limit the file to your OS user (0600 on POSIX, user-only folder/file ACLs on Windows). The reader refuses symlinks and files above 64 KB. Refresh writes atomically at mode 0600. Read [authentication and accounts](./README.md#3-set-up-kit-access) for environment-token alternatives, refresh failures and precedence. No fine-grained OAuth scope claims are inferred from schema labels.
 
 ### Agent-guided installation
 
