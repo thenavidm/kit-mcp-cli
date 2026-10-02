@@ -13,7 +13,7 @@ Kit MCP server and CLI for Claude Code, Codex and AI agents. **85 tools: 38 read
 
 One package gives you two ways in: `kit-mcp` connects the tools to your AI app, and `kit-cli` makes the same tools shell commands. Claude Desktop also has a bundled `.mcpb` extension. The 40 audience, delivery, deletion and signing-secret operations require explicit confirmation.
 
-Built and maintained by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=referral&utm_campaign=kit-mcp-cli&utm_content=readme). The installation guide is in [INSTALL.md](INSTALL.md); the matching navid.me CMS guide is prepared and its database sync remains pending.
+Built and maintained by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=referral&utm_campaign=kit-mcp-cli&utm_content=readme). The installation guide is in [INSTALL.md](INSTALL.md); the full matching navid.me guide is saved as a CMS draft and awaits publication.
 
 <img src="https://cdn.navid.me/repos/kit-mcp-cli.gif" alt="Illustrated Kit workflow in the same terminal component used on navid.me" width="520">
 
