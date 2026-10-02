@@ -2,6 +2,12 @@
 
 Versions follow semantic versioning. Release tags are annotated v<version> and desktop archives track the npm package version. Dates are UTC.
 
+## 2.0.1 — 2026-10-02
+
+- Fix the rendered full argument catalog: table rows now stay contiguous Markdown instead of being separated by blank paragraphs.
+- Runtime/API behavior is unchanged from 2.0.0.
+- Ship the fixed README in npm and the matching desktop bundle; the current release is 2.0.1.
+
 ## 2.0.0 — 2026-10-02
 
 ### Added

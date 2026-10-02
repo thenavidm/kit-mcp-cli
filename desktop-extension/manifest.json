@@ -2,7 +2,7 @@
   "manifest_version": "0.2",
   "name": "kit",
   "display_name": "Kit",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Kit MCP server with 85 tools for newsletters, subscribers, tags, sequences, statistics, forms, snippets, bulk operations and webhooks.",
   "long_description": "Requires eligible Kit API v4 access. Enter a v4 API key for personal automation or a private authorized OAuth token-file path for full endpoint eligibility. Audience/delivery/deletion changes require confirmation. Read-only exposes 38 reads. Credentials are never bundled. The same tools are available through kit-cli.",
   "author": {

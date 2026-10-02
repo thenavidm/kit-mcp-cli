@@ -125,7 +125,7 @@ npx -y --package @thenavidm/kit-mcp-cli@latest kit-cli tools
 | --- | --- | --- |
 | `kit-mcp` | Local stdio server launched by an MCP client | Natural language account work in a compatible AI app |
 | `kit-cli` | Schema-derived commands with machine-readable output | Scripts, CI and agents with shell access |
-| `kit-2.0.0.mcpb` | Local MCP server with bundled production dependencies | Claude Desktop custom extensions |
+| `kit-2.0.1.mcpb` | Local MCP server with bundled production dependencies | Claude Desktop custom extensions |
 | Official Kit MCP | Hosted `https://app.kit.com/mcp` with Kit OAuth | Remote connections and browser-only AI clients |
 
 The CLI creates a real MCP server and client connected through the SDK's in-memory transport. It discovers the server's tools and calls the same schemas, validation, handlers and safety guards. Separate handwritten CLI request logic cannot drift from the MCP path.
@@ -367,177 +367,91 @@ When rotating, update and verify your receiver before revoking the previous secr
 The following catalog is generated from the actual `tools/list` result. Body-required fields are enforced within `payload` or individual body arguments at execution; path/query requirements appear in each input schema. `schema <command>` is the exact machine-readable reference. OAuth-only labels come from the pinned operation security definitions.
 
 | Tool | API | Mode | OAuth only |
-
 | --- | --- | --- | --- |
-
 | `get_account` | `GET /v4/account` | Read | No |
-
 | `list_colors` | `GET /v4/account/colors` | Read | No |
-
 | `update_colors` | `PUT /v4/account/colors` | Write | No |
-
 | `get_creator_profile` | `GET /v4/account/creator_profile` | Read | No |
-
 | `get_email_stats` | `GET /v4/account/email_stats` | Read | No |
-
 | `get_growth_stats` | `GET /v4/account/growth_stats` | Read | No |
-
 | `list_broadcasts` | `GET /v4/broadcasts` | Read | No |
-
 | `create_broadcast` | `POST /v4/broadcasts` | Write, confirms | No |
-
 | `list_broadcast_stats` | `GET /v4/broadcasts/stats` | Read | No |
-
 | `get_broadcast_clicks` | `GET /v4/broadcasts/{broadcast_id}/clicks` | Read | No |
-
 | `get_broadcast_stats` | `GET /v4/broadcasts/{broadcast_id}/stats` | Read | No |
-
 | `delete_broadcast` | `DELETE /v4/broadcasts/{id}` | Write, confirms | No |
-
 | `get_broadcast` | `GET /v4/broadcasts/{id}` | Read | No |
-
 | `update_broadcast` | `PUT /v4/broadcasts/{id}` | Write, confirms | No |
-
 | `bulk_create_custom_fields` | `POST /v4/bulk/custom_fields` | Write | Yes |
-
 | `bulk_update_subscriber_custom_field_values` | `POST /v4/bulk/custom_fields/subscribers` | Write, confirms | Yes |
-
 | `list_custom_fields` | `GET /v4/custom_fields` | Read | No |
-
 | `create_custom_field` | `POST /v4/custom_fields` | Write | No |
-
 | `delete_custom_field` | `DELETE /v4/custom_fields/{id}` | Write, confirms | No |
-
 | `update_custom_field` | `PUT /v4/custom_fields/{id}` | Write | No |
-
 | `list_email_templates` | `GET /v4/email_templates` | Read | No |
-
 | `bulk_add_subscribers_to_forms` | `POST /v4/bulk/forms/subscribers` | Write, confirms | Yes |
-
 | `list_forms` | `GET /v4/forms` | Read | No |
-
 | `list_subscribers_for_form` | `GET /v4/forms/{form_id}/subscribers` | Read | No |
-
 | `add_subscriber_to_form` | `POST /v4/forms/{form_id}/subscribers` | Write, confirms | No |
-
 | `add_subscriber_to_form_by_id` | `POST /v4/forms/{form_id}/subscribers/{id}` | Write, confirms | No |
-
 | `list_posts` | `GET /v4/posts` | Read | No |
-
 | `get_post` | `GET /v4/posts/{id}` | Read | No |
-
 | `list_purchases` | `GET /v4/purchases` | Read | Yes |
-
 | `create_purchase` | `POST /v4/purchases` | Write, confirms | Yes |
-
 | `get_purchase` | `GET /v4/purchases/{id}` | Read | Yes |
-
 | `list_segments` | `GET /v4/segments` | Read | No |
-
 | `list_sequence_emails` | `GET /v4/sequences/{sequence_id}/emails` | Read | No |
-
 | `create_sequence_email` | `POST /v4/sequences/{sequence_id}/emails` | Write, confirms | No |
-
 | `delete_sequence_email` | `DELETE /v4/sequences/{sequence_id}/emails/{id}` | Write, confirms | No |
-
 | `get_sequence_email` | `GET /v4/sequences/{sequence_id}/emails/{id}` | Read | No |
-
 | `update_sequence_email` | `PUT /v4/sequences/{sequence_id}/emails/{id}` | Write, confirms | No |
-
 | `list_sequences` | `GET /v4/sequences` | Read | No |
-
 | `create_sequence` | `POST /v4/sequences` | Write, confirms | No |
-
 | `delete_sequence` | `DELETE /v4/sequences/{id}` | Write, confirms | No |
-
 | `get_sequence` | `GET /v4/sequences/{id}` | Read | No |
-
 | `update_sequence` | `PUT /v4/sequences/{id}` | Write, confirms | No |
-
 | `list_subscribers_for_sequence` | `GET /v4/sequences/{sequence_id}/subscribers` | Read | No |
-
 | `add_subscriber_to_sequence` | `POST /v4/sequences/{sequence_id}/subscribers` | Write, confirms | No |
-
 | `add_subscriber_to_sequence_by_id` | `POST /v4/sequences/{sequence_id}/subscribers/{id}` | Write, confirms | No |
-
 | `list_snippets` | `GET /v4/snippets` | Read | No |
-
 | `create_snippet` | `POST /v4/snippets` | Write, confirms | No |
-
 | `get_snippet` | `GET /v4/snippets/{id}` | Read | No |
-
 | `update_snippet` | `PUT /v4/snippets/{id}` | Write, confirms | No |
-
 | `bulk_create_subscribers` | `POST /v4/bulk/subscribers` | Write, confirms | Yes |
-
 | `list_subscribers` | `GET /v4/subscribers` | Read | No |
-
 | `create_subscriber` | `POST /v4/subscribers` | Write, confirms | No |
-
 | `filter_subscribers` | `POST /v4/subscribers/filter` | Read | No |
-
 | `get_subscriber` | `GET /v4/subscribers/{id}` | Read | No |
-
 | `update_subscriber` | `PUT /v4/subscribers/{id}` | Write, confirms | No |
-
 | `unsubscribe` | `POST /v4/subscribers/{id}/unsubscribe` | Write, confirms | No |
-
 | `delete_subscriber_location` | `DELETE /v4/subscribers/{subscriber_id}/location` | Write, confirms | No |
-
 | `update_subscriber_location` | `PATCH /v4/subscribers/{subscriber_id}/location` | Write, confirms | No |
-
 | `pin_subscriber_location` | `POST /v4/subscribers/{subscriber_id}/location` | Write, confirms | No |
-
 | `get_subscriber_stats` | `GET /v4/subscribers/{subscriber_id}/stats` | Read | No |
-
 | `list_subscriber_tags` | `GET /v4/subscribers/{subscriber_id}/tags` | Read | No |
-
 | `bulk_delete_tags` | `DELETE /v4/bulk/tags` | Write, confirms | Yes |
-
 | `bulk_create_tags` | `POST /v4/bulk/tags` | Write | Yes |
-
 | `bulk_remove_tags_from_subscribers` | `DELETE /v4/bulk/tags/subscribers` | Write, confirms | Yes |
-
 | `bulk_tag_subscribers` | `POST /v4/bulk/tags/subscribers` | Write, confirms | Yes |
-
 | `list_tags` | `GET /v4/tags` | Read | No |
-
 | `create_tag` | `POST /v4/tags` | Write | No |
-
 | `update_tag_name` | `PUT /v4/tags/{id}` | Write | No |
-
 | `untag_subscriber_by_email` | `DELETE /v4/tags/{tag_id}/subscribers` | Write, confirms | No |
-
 | `list_subscribers_for_tag` | `GET /v4/tags/{tag_id}/subscribers` | Read | No |
-
 | `tag_subscriber` | `POST /v4/tags/{tag_id}/subscribers` | Write, confirms | No |
-
 | `untag_subscriber` | `DELETE /v4/tags/{tag_id}/subscribers/{id}` | Write, confirms | No |
-
 | `tag_subscriber_by_id` | `POST /v4/tags/{tag_id}/subscribers/{id}` | Write, confirms | No |
-
 | `list_webhook_endpoints` | `GET /v4/webhook_endpoints` | Read | No |
-
 | `create_webhook_endpoint` | `POST /v4/webhook_endpoints` | Write, confirms | No |
-
 | `delete_webhook_endpoint` | `DELETE /v4/webhook_endpoints/{id}` | Write, confirms | No |
-
 | `get_webhook_endpoint` | `GET /v4/webhook_endpoints/{id}` | Read | No |
-
 | `update_webhook_endpoint` | `PATCH /v4/webhook_endpoints/{id}` | Write, confirms | No |
-
 | `revoke_previous_webhook_secret` | `POST /v4/webhook_endpoints/{id}/revoke_previous_secret` | Write, confirms | No |
-
 | `rotate_webhook_secret` | `POST /v4/webhook_endpoints/{id}/rotate_secret` | Write, confirms | No |
-
 | `list_webhooks` | `GET /v4/webhooks` | Read | No |
-
 | `create_webhook` | `POST /v4/webhooks` | Write, confirms | No |
-
 | `delete_webhook` | `DELETE /v4/webhooks/{id}` | Write, confirms | No |
-
 | `search_subscribers` | Alias for GET /v4/subscribers with exact email | Read | No |
-
 | `list_accounts` | Local labels only | Read | No |
 
 ### Shared input rules
@@ -555,7 +469,6 @@ kit-cli get-account --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
 
 #### list_colors
@@ -567,7 +480,6 @@ kit-cli list-colors --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
 
 #### update_colors
@@ -579,9 +491,7 @@ kit-cli update-colors --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `colors` | array | Body | An array of up to 10 color hex codes |
 
 #### get_creator_profile
@@ -593,7 +503,6 @@ kit-cli get-creator-profile --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
 
 #### get_email_stats
@@ -605,7 +514,6 @@ kit-cli get-email-stats --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
 
 #### get_growth_stats
@@ -617,11 +525,8 @@ kit-cli get-growth-stats --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `ending` | string | No | See the exact input schema. |
-
 | `starting` | string | No | See the exact input schema. |
 
 #### list_broadcasts
@@ -633,27 +538,16 @@ kit-cli list-broadcasts --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `sent_after` | schema | No | See the exact input schema. |
-
 | `sent_before` | schema | No | See the exact input schema. |
-
 | `slim` | boolean | No | See the exact input schema. |
-
 | `status` | string | No |  Values: `draft`, `scheduled`, `sending`, `completed`, `aborted`. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### create_broadcast
@@ -665,33 +559,19 @@ kit-cli create-broadcast --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `email_template_id` | integer | No | Id of the email template to use. Uses the account's default template if not provided. 'Starting point' template is not supported. |
-
 | `email_address` | string/null | No | The sending email address to use. Uses the account's sending email address if not provided. |
-
 | `content` | string | No | The HTML content of the email. On a `Classic` template this is the body, and the template adds the design around it when the broadcast is sent. On a `Starting point` template the design lives in the body, so this is the complete email: keep the wrappers, images, inline styles and Liquid tags, including `{{ unsubscribe_url }}` and `{{ address }}`. Without an unsubscribe link the broadcast can't be sent. A read returns the string that was written, so `GET`, `PUT`, `GET` round-trips, apart from Kit's own "Built with Kit" badge, which a `Starting point` write takes out of the body and re-applies when the email renders. A broadcast built in Kit's editor reads back as Kit's rendered HTML instead, and writing that back replaces its individually-editable blocks with one HTML block. Sending `content` in the same request as a `Starting point` `email_template_id` also needs `allow_starting_point: true`. Omit `content` and name a `Starting point` template in `email_template_id` to create the broadcast with that template's own design. |
-
 | `description` | string | No | See the exact input schema. |
-
 | `public` | boolean | No | `true` to publish this broadcast to the web. The broadcast will appear in a newsletter feed on your Creator Profile and Landing Pages. |
-
 | `published_at` | string | No | The published timestamp to display in ISO8601 format. If no timezone is provided, UTC is assumed. |
-
 | `send_at` | string/null | No | The scheduled send time for this broadcast in ISO8601 format. If no timezone is provided, UTC is assumed. |
-
 | `thumbnail_alt` | string/null | No | See the exact input schema. |
-
 | `thumbnail_url` | string/null | No | See the exact input schema. |
-
 | `preview_text` | string | No | See the exact input schema. |
-
 | `subject` | string | Body | See the exact input schema. |
-
 | `subscriber_filter` | array | No | Filters your subscribers. At this time, we only support using only one filter group type via the API (e.g. `all`, `any`, or `none` but no combinations). If nothing is provided, will default to all of your subscribers. |
-
 | `allow_starting_point` | boolean | No | Explicitly allow replacing a Starting point template body, as described in Kit’s current content-field documentation. Review the complete rendered HTML first. |
 
 Body alternatives: content; email_template_id.
@@ -705,25 +585,15 @@ kit-cli list-broadcast-stats --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `sent_after` | schema | No | See the exact input schema. |
-
 | `sent_before` | schema | No | See the exact input schema. |
-
 | `status` | string | No |  Values: `draft`, `scheduled`, `sending`, `completed`, `aborted`. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### get_broadcast_clicks
@@ -735,9 +605,7 @@ kit-cli get-broadcast-clicks --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `broadcast_id` | schema | Yes | Positive broadcast id. |
 
 #### get_broadcast_stats
@@ -749,9 +617,7 @@ kit-cli get-broadcast-stats --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `broadcast_id` | schema | Yes | Positive broadcast id. |
 
 #### delete_broadcast
@@ -763,9 +629,7 @@ kit-cli delete-broadcast --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `broadcast_id` | schema | Yes | Positive broadcast id. |
 
 #### get_broadcast
@@ -777,9 +641,7 @@ kit-cli get-broadcast --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `broadcast_id` | schema | Yes | Positive broadcast id. |
 
 #### update_broadcast
@@ -791,35 +653,20 @@ kit-cli update-broadcast --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `broadcast_id` | schema | Yes | Positive broadcast id. |
-
 | `email_template_id` | integer | No | Id of the email template to use. Uses the account's default template if not provided. 'Starting point' template is not supported. |
-
 | `email_address` | string/null | No | The sending email address to use. Uses the account's sending email address if not provided. |
-
 | `content` | string | No | The HTML content of the email. On a `Classic` template this is the body, and the template adds the design around it when the broadcast is sent. On a `Starting point` template the design lives in the body, so this is the complete email: keep the wrappers, images, inline styles and Liquid tags, including `{{ unsubscribe_url }}` and `{{ address }}`. Without an unsubscribe link the broadcast can't be sent. A read returns the string that was written, so `GET`, `PUT`, `GET` round-trips, apart from Kit's own "Built with Kit" badge, which a `Starting point` write takes out of the body and re-applies when the email renders. A broadcast built in Kit's editor reads back as Kit's rendered HTML instead, and writing that back replaces its individually-editable blocks with one HTML block. Sending `content` in the same request as a `Starting point` `email_template_id` also needs `allow_starting_point: true`. |
-
 | `description` | string | No | See the exact input schema. |
-
 | `public` | boolean | No | `true` to publish this broadcast to the web. The broadcast will appear in a newsletter feed on your Creator Profile and Landing Pages. |
-
 | `published_at` | string | No | The published timestamp to display in ISO8601 format. If no timezone is provided, UTC is assumed. |
-
 | `send_at` | string/null | No | The scheduled send time for this broadcast in ISO8601 format. If no timezone is provided, UTC is assumed. |
-
 | `thumbnail_alt` | string/null | No | See the exact input schema. |
-
 | `thumbnail_url` | string/null | No | See the exact input schema. |
-
 | `preview_text` | string | No | See the exact input schema. |
-
 | `subject` | string | No | See the exact input schema. |
-
 | `subscriber_filter` | array | No | Filters your subscribers. At this time, we only support using only one filter group type via the API (e.g. `all`, `any`, or `none` but no combinations). If nothing is provided, will default to all of your subscribers. |
-
 | `allow_starting_point` | boolean | No | Explicitly allow replacing a Starting point template body, as described in Kit’s current content-field documentation. Review the complete rendered HTML first. |
 
 #### bulk_create_custom_fields
@@ -831,11 +678,8 @@ kit-cli bulk-create-custom-fields --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `custom_fields` | array | Body | See the exact input schema. |
-
 | `callback_url` | string/null | No | See the exact input schema. |
 
 #### bulk_update_subscriber_custom_field_values
@@ -847,11 +691,8 @@ kit-cli bulk-update-subscriber-custom-field-values --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `custom_field_values` | array | Body | See the exact input schema. |
-
 | `callback_url` | schema | Body | See the exact input schema. |
 
 #### list_custom_fields
@@ -863,19 +704,12 @@ kit-cli list-custom-fields --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### create_custom_field
@@ -887,9 +721,7 @@ kit-cli create-custom-field --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `label` | string | Body | See the exact input schema. |
 
 #### delete_custom_field
@@ -901,9 +733,7 @@ kit-cli delete-custom-field --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `custom_field_id` | schema | Yes | Positive custom field id. |
 
 #### update_custom_field
@@ -915,11 +745,8 @@ kit-cli update-custom-field --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `custom_field_id` | schema | Yes | Positive custom field id. |
-
 | `label` | string | Body | See the exact input schema. |
 
 #### list_email_templates
@@ -931,19 +758,12 @@ kit-cli list-email-templates --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### bulk_add_subscribers_to_forms
@@ -955,11 +775,8 @@ kit-cli bulk-add-subscribers-to-forms --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `additions` | array | Body | See the exact input schema. |
-
 | `callback_url` | string/null | No | See the exact input schema. |
 
 #### list_forms
@@ -971,25 +788,15 @@ kit-cli list-forms --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `status` | string/null | No |  Values: `active`, `archived`, `trashed`, `all`. |
-
 | `type` | schema | No | See the exact input schema. |
-
 | `include` | string | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### list_subscribers_for_form
@@ -1001,33 +808,19 @@ kit-cli list-subscribers-for-form --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `added_after` | string/null | No | See the exact input schema. |
-
 | `added_before` | string/null | No | See the exact input schema. |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `created_after` | string/null | No | See the exact input schema. |
-
 | `created_before` | string/null | No | See the exact input schema. |
-
 | `form_id` | schema | Yes | Positive form id. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `slim` | boolean | No | See the exact input schema. |
-
 | `status` | string | No |  Values: `active`, `inactive`, `bounced`, `complained`, `cancelled`, `all`. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### add_subscriber_to_form
@@ -1039,13 +832,9 @@ kit-cli add-subscriber-to-form --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `form_id` | schema | Yes | Positive form id. |
-
 | `email_address` | string | Body | See the exact input schema. |
-
 | `referrer` | string/null | No | See the exact input schema. |
 
 #### add_subscriber_to_form_by_id
@@ -1057,13 +846,9 @@ kit-cli add-subscriber-to-form-by-id --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `form_id` | schema | Yes | Positive form id. |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
-
 | `referrer` | string | Body | See the exact input schema. |
 
 #### list_posts
@@ -1075,21 +860,13 @@ kit-cli list-posts --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_content` | boolean | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### get_post
@@ -1101,9 +878,7 @@ kit-cli get-post --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `post_id` | schema | Yes | Positive post id. |
 
 #### list_purchases
@@ -1115,19 +890,12 @@ kit-cli list-purchases --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### create_purchase
@@ -1139,9 +907,7 @@ kit-cli create-purchase --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `purchase` | object | Body | See the exact input schema. |
 
 #### get_purchase
@@ -1153,9 +919,7 @@ kit-cli get-purchase --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `purchase_id` | schema | Yes | Positive purchase id. |
 
 #### list_segments
@@ -1167,19 +931,12 @@ kit-cli list-segments --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### list_sequence_emails
@@ -1191,25 +948,15 @@ kit-cli list-sequence-emails --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_content` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `sequence_id` | schema | Yes | Positive sequence id. |
-
 | `include` | string | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### create_sequence_email
@@ -1221,27 +968,16 @@ kit-cli create-sequence-email --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `sequence_id` | schema | Yes | Positive sequence id. |
-
 | `subject` | string | Body | Subject line of the email |
-
 | `preview_text` | string/null | No | Preview text shown in email clients before the email is opened |
-
 | `content` | string/null | No | HTML body content of the email |
-
 | `delay_value` | integer | Body | Number of days or hours to wait before sending this email after the previous one |
-
 | `delay_unit` | string | Body | Unit for the send delay. Use `days` for schedule-aware delivery, `hours` for a fixed hourly delay Values: `days`, `hours`. |
-
 | `email_template_id` | integer/null | No | ID of the email template to use for layout and styling |
-
 | `published` | boolean | No | Whether the email is active and will be sent to subscribers. Defaults to `false` (draft) |
-
 | `send_days` | array/null | No | Days of the week this email may be sent. Defaults to all 7 days (inherits the sequence schedule). Pass a subset to restrict delivery, or `null` to reset to all days |
-
 | `position` | integer/null | No | Zero-based position of the email in the sequence. Assigned automatically after the last email if omitted |
 
 #### delete_sequence_email
@@ -1253,11 +989,8 @@ kit-cli delete-sequence-email --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `email_id` | schema | Yes | Positive email id. |
-
 | `sequence_id` | schema | Yes | Positive sequence id. |
 
 #### get_sequence_email
@@ -1269,13 +1002,9 @@ kit-cli get-sequence-email --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `email_id` | schema | Yes | Positive email id. |
-
 | `sequence_id` | schema | Yes | Positive sequence id. |
-
 | `include` | string | No | See the exact input schema. |
 
 #### update_sequence_email
@@ -1287,29 +1016,17 @@ kit-cli update-sequence-email --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `email_id` | schema | Yes | Positive email id. |
-
 | `sequence_id` | schema | Yes | Positive sequence id. |
-
 | `subject` | string | No | New subject line for the email |
-
 | `preview_text` | string/null | No | New preview text shown in email clients before the email is opened |
-
 | `content` | string/null | No | New HTML body content of the email |
-
 | `delay_value` | integer | No | New delay value |
-
 | `delay_unit` | string | No | New delay unit. Use `days` for schedule-aware delivery, `hours` for a fixed hourly delay Values: `days`, `hours`. |
-
 | `email_template_id` | integer/null | No | New email template ID for layout and styling. Pass `null` to clear |
-
 | `published` | boolean | No | Pass `true` to publish a draft email or `false` to unpublish it |
-
 | `send_days` | array/null | No | Days of the week this email may be sent. Pass a subset to restrict delivery, or `null` to reset to all days (inherits the sequence schedule) |
-
 | `position` | integer/null | No | New zero-based position of the email in the sequence |
 
 #### list_sequences
@@ -1321,21 +1038,13 @@ kit-cli list-sequences --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `include` | string | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### create_sequence
@@ -1347,27 +1056,16 @@ kit-cli create-sequence --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `name` | string | No | The name of the sequence. |
-
 | `email_address` | string | No | The sending email address to use. Uses the account's sending email address if not provided. |
-
 | `email_template_id` | integer | No | Id of the email template to use. |
-
 | `send_days` | array | No | The days of the week to send the sequence on. Must be one of: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`. |
-
 | `send_hour` | integer | No | The hour of the day to send the sequence at. Must be an integer between 0 and 23. |
-
 | `time_zone` | string | No | The timezone to use for the sequence. Must be a valid IANA timezone string. |
-
 | `active` | boolean | No | `true` to activate the sequence, `false` to deactivate it. |
-
 | `repeat` | boolean | No | When `true`, subscribers can restart the sequence multiple times. |
-
 | `hold` | boolean | No | When `true`, subscribers added via Visual Automations stay in the sequence after receiving the last email. |
-
 | `exclude_subscriber_sources` | array | No | The subscriber sources to exclude from the sequence. |
 
 #### delete_sequence
@@ -1379,9 +1077,7 @@ kit-cli delete-sequence --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `sequence_id` | schema | Yes | Positive sequence id. |
 
 #### get_sequence
@@ -1393,11 +1089,8 @@ kit-cli get-sequence --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `sequence_id` | schema | Yes | Positive sequence id. |
-
 | `include` | string | No | See the exact input schema. |
 
 #### update_sequence
@@ -1409,29 +1102,17 @@ kit-cli update-sequence --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `sequence_id` | schema | Yes | Positive sequence id. |
-
 | `name` | string | No | The name of the sequence. |
-
 | `email_address` | string | No | The sending email address to use. Uses the account's sending email address if not provided. |
-
 | `email_template_id` | integer | No | Id of the email template to use. |
-
 | `send_days` | array | No | The days of the week to send the sequence on. Must be one of: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`. |
-
 | `send_hour` | integer | No | The hour of the day to send the sequence at. Must be an integer between 0 and 23. |
-
 | `time_zone` | string | No | The timezone to use for the sequence. Must be a valid IANA timezone string. |
-
 | `active` | boolean | No | `true` to activate the sequence, `false` to deactivate it. |
-
 | `repeat` | boolean | No | When `true`, subscribers can restart the sequence multiple times. |
-
 | `hold` | boolean | No | When `true`, subscribers added via Visual Automations stay in the sequence after receiving the last email. |
-
 | `exclude_subscriber_sources` | array | No | The subscriber sources to exclude from the sequence. |
 
 #### list_subscribers_for_sequence
@@ -1443,31 +1124,18 @@ kit-cli list-subscribers-for-sequence --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `added_after` | string/null | No | See the exact input schema. |
-
 | `added_before` | string/null | No | See the exact input schema. |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `created_after` | string/null | No | See the exact input schema. |
-
 | `created_before` | string/null | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `sequence_id` | schema | Yes | Positive sequence id. |
-
 | `status` | string | No |  Values: `active`, `inactive`, `bounced`, `complained`, `cancelled`, `all`. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### add_subscriber_to_sequence
@@ -1479,11 +1147,8 @@ kit-cli add-subscriber-to-sequence --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `sequence_id` | schema | Yes | Positive sequence id. |
-
 | `email_address` | string | Body | See the exact input schema. |
 
 #### add_subscriber_to_sequence_by_id
@@ -1495,11 +1160,8 @@ kit-cli add-subscriber-to-sequence-by-id --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
-
 | `sequence_id` | schema | Yes | Positive sequence id. |
 
 #### list_snippets
@@ -1511,25 +1173,15 @@ kit-cli list-snippets --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `archived` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_content` | boolean | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `snippet_type` | schema | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### create_snippet
@@ -1541,7 +1193,6 @@ kit-cli create-snippet --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
 
 #### get_snippet
@@ -1553,9 +1204,7 @@ kit-cli get-snippet --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `snippet_id` | schema | Yes | Positive snippet id. |
 
 #### update_snippet
@@ -1567,9 +1216,7 @@ kit-cli update-snippet --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `snippet_id` | schema | Yes | Positive snippet id. |
 
 #### bulk_create_subscribers
@@ -1581,11 +1228,8 @@ kit-cli bulk-create-subscribers --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `subscribers` | array | Body | See the exact input schema. |
-
 | `callback_url` | string/null | No | See the exact input schema. |
 
 #### list_subscribers
@@ -1597,39 +1241,22 @@ kit-cli list-subscribers --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | string/null | No | See the exact input schema. |
-
 | `before` | string/null | No | See the exact input schema. |
-
 | `created_after` | string | No | See the exact input schema. |
-
 | `created_before` | string | No | See the exact input schema. |
-
 | `email_address` | string | No | See the exact input schema. |
-
 | `include` | string | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | number/null | No | See the exact input schema. |
-
 | `slim` | boolean | No | See the exact input schema. |
-
 | `sort_field` | string | No |  Values: `id`, `created_at`, `updated_at`, `cancelled_at`, `canceled_at`, `engagement__sent`, `engagement__opens`, `engagement__clicks`, `engagement__open_rate`, `engagement__click_rate`. |
-
 | `sort_order` | string | No |  Values: `asc`, `desc`. |
-
 | `status` | string | No |  Values: `active`, `inactive`, `bounced`, `complained`, `cancelled`, `all`. |
-
 | `updated_after` | string | No | See the exact input schema. |
-
 | `updated_before` | string | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### create_subscriber
@@ -1641,15 +1268,10 @@ kit-cli create-subscriber --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `first_name` | string/null | No | See the exact input schema. |
-
 | `email_address` | string | Body | See the exact input schema. |
-
 | `state` | string/null | No | Create subscriber in this state (`active`, `bounced`, `cancelled`, `complained` or `inactive`). Defaults to `active`. Values: `active`, `cancelled`, `bounced`, `complained`, `inactive`. |
-
 | `fields` | object | No | Custom field values keyed by the custom field's `key` (e.g. `last_name`, not `Last Name`). Unknown keys are ignored and reported in the response `warnings` array. |
 
 #### filter_subscribers
@@ -1661,17 +1283,11 @@ kit-cli filter-subscribers --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `counting_mode` | string | No | Controls how engagement-filter count thresholds are tallied. `raw` (default) counts every event : five opens of the same email = five. `unique_email` counts distinct emails on which the action occurred : five opens of the same email = one. Applies to every engagement filter (opens, clicks, sent, delivered) in the request; ignored for other filter types. Values: `raw`, `unique_email`. |
-
 | `all` | array | Body | Array of filter conditions where ALL must be met (AND logic) |
-
 | `include` | array | No | Optional. Array of `{ type, ...config }` objects naming additional fields to embed on each subscriber row. Valid types: `attribution`, `tags`, `location`, `canceled_at`, `stats`, `custom_fields`. The `stats` type accepts an optional `range: { start, end }` (YYYY-MM-DD dates, defaulting to the last 90 days). The `custom_fields` type adds a `fields` object with all account custom field values (null for fields the subscriber has not set). |
-
 | `sort_field` | string | No | Field to order results by. Base columns (`id`, `first_name`, `email_address`, `created_at`) order by that subscriber attribute. `engagement__ ` orders by an engagement stat over the trailing 90 days: counts (`sent`, `opens`, `clicks`) and rates (`open_rate`, `click_rate`); subscribers with no sends order as 0. `location__distance` orders by great-circle distance and requires a `location` filter in the same request : its `latitude`/`longitude` supply the origin, and subscribers without a primary location are excluded. Distance defaults to nearest-first (`sort_order` defaults to `asc` for this field); pass `sort_order=desc` for farthest-first. Values: `id`, `first_name`, `email_address`, `created_at`, `engagement__sent`, `engagement__opens`, `engagement__clicks`, `engagement__open_rate`, `engagement__click_rate`, `location__distance`. Default: `"created_at"`. |
-
 | `sort_order` | string | No | Sort direction (default: desc). Values: `asc`, `desc`. |
 
 #### get_subscriber
@@ -1683,9 +1299,7 @@ kit-cli get-subscriber --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
 
 #### update_subscriber
@@ -1697,15 +1311,10 @@ kit-cli update-subscriber --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
-
 | `first_name` | string/null | No | See the exact input schema. |
-
 | `email_address` | string | Body | See the exact input schema. |
-
 | `fields` | object | No | Custom field values keyed by the custom field's `key` (e.g. `last_name`, not `Last Name`). Unknown keys are ignored and reported in the response `warnings` array. |
 
 #### unsubscribe
@@ -1717,9 +1326,7 @@ kit-cli unsubscribe --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
 
 #### delete_subscriber_location
@@ -1731,9 +1338,7 @@ kit-cli delete-subscriber-location --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
 
 #### update_subscriber_location
@@ -1745,11 +1350,8 @@ kit-cli update-subscriber-location --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
-
 | `location` | object | Body | See the exact input schema. |
 
 #### pin_subscriber_location
@@ -1761,11 +1363,8 @@ kit-cli pin-subscriber-location --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
-
 | `location` | object | Body | See the exact input schema. |
 
 #### get_subscriber_stats
@@ -1777,13 +1376,9 @@ kit-cli get-subscriber-stats --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `email_sent_after` | string | No | See the exact input schema. |
-
 | `email_sent_before` | string | No | See the exact input schema. |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
 
 #### list_subscriber_tags
@@ -1795,21 +1390,13 @@ kit-cli list-subscriber-tags --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### bulk_delete_tags
@@ -1821,11 +1408,8 @@ kit-cli bulk-delete-tags --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `tags` | array | Body | Tags to delete, identified by `id`. Batches of 100 or fewer are processed synchronously (200); larger batches are queued and processed asynchronously (202). |
-
 | `callback_url` | string/null | No | Optional. When the batch is processed asynchronously (more than 100 tags), the results are POSTed to this URL on completion. |
 
 #### bulk_create_tags
@@ -1837,11 +1421,8 @@ kit-cli bulk-create-tags --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `tags` | array | Body | See the exact input schema. |
-
 | `callback_url` | string/null | No | See the exact input schema. |
 
 #### bulk_remove_tags_from_subscribers
@@ -1853,7 +1434,6 @@ kit-cli bulk-remove-tags-from-subscribers --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
 
 #### bulk_tag_subscribers
@@ -1865,11 +1445,8 @@ kit-cli bulk-tag-subscribers --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `taggings` | array | Body | See the exact input schema. |
-
 | `callback_url` | string/null | No | See the exact input schema. |
 
 #### list_tags
@@ -1881,21 +1458,13 @@ kit-cli list-tags --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `include` | string | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### create_tag
@@ -1907,9 +1476,7 @@ kit-cli create-tag --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `name` | string | Body | See the exact input schema. |
 
 #### update_tag_name
@@ -1921,11 +1488,8 @@ kit-cli update-tag-name --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `tag_id` | schema | Yes | Positive tag id. |
-
 | `name` | string | Body | See the exact input schema. |
 
 #### untag_subscriber_by_email
@@ -1937,11 +1501,8 @@ kit-cli untag-subscriber-by-email --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `tag_id` | schema | Yes | Positive tag id. |
-
 | `email_address` | string | Yes | See the exact input schema. |
 
 #### list_subscribers_for_tag
@@ -1953,33 +1514,19 @@ kit-cli list-subscribers-for-tag --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `created_after` | string/null | No | See the exact input schema. |
-
 | `created_before` | string/null | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `slim` | boolean | No | See the exact input schema. |
-
 | `status` | string | No |  Values: `active`, `inactive`, `bounced`, `complained`, `cancelled`, `all`. |
-
 | `tag_id` | schema | Yes | Positive tag id. |
-
 | `tagged_after` | string/null | No | See the exact input schema. |
-
 | `tagged_before` | string/null | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### tag_subscriber
@@ -1991,11 +1538,8 @@ kit-cli tag-subscriber --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `tag_id` | schema | Yes | Positive tag id. |
-
 | `email_address` | string | Body | See the exact input schema. |
 
 #### untag_subscriber
@@ -2007,11 +1551,8 @@ kit-cli untag-subscriber --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
-
 | `tag_id` | schema | Yes | Positive tag id. |
 
 #### tag_subscriber_by_id
@@ -2023,11 +1564,8 @@ kit-cli tag-subscriber-by-id --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `subscriber_id` | schema | Yes | Positive subscriber id. |
-
 | `tag_id` | schema | Yes | Positive tag id. |
 
 #### list_webhook_endpoints
@@ -2039,21 +1577,13 @@ kit-cli list-webhook-endpoints --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `status` | string | No |  Values: `active`, `disabled`. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### create_webhook_endpoint
@@ -2065,17 +1595,11 @@ kit-cli create-webhook-endpoint --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `url` | string | Body | See the exact input schema. |
-
 | `events` | array | Body | Event types this endpoint subscribes to (e.g. `subscriber.created`). On update, the list supplied here replaces the endpoint's full subscription list. |
-
 | `name` | string | No | See the exact input schema. |
-
 | `description` | string | No | See the exact input schema. |
-
 | `secret_name` | string | Yes | New private filename under KIT_PRIVATE_DIR. Required before creating/rotating a signing secret; never overwritten. |
 
 #### delete_webhook_endpoint
@@ -2087,9 +1611,7 @@ kit-cli delete-webhook-endpoint --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `webhook_endpoint_id` | schema | Yes | Positive webhook endpoint id. |
 
 #### get_webhook_endpoint
@@ -2101,9 +1623,7 @@ kit-cli get-webhook-endpoint --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `webhook_endpoint_id` | schema | Yes | Positive webhook endpoint id. |
 
 #### update_webhook_endpoint
@@ -2115,19 +1635,12 @@ kit-cli update-webhook-endpoint --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `webhook_endpoint_id` | schema | Yes | Positive webhook endpoint id. |
-
 | `name` | string | No | See the exact input schema. |
-
 | `url` | string | No | See the exact input schema. |
-
 | `description` | string | No | See the exact input schema. |
-
 | `status` | string | No | Endpoint status. One of: `active`, `disabled`. Values: `active`, `disabled`. |
-
 | `events` | array | No | Event types this endpoint subscribes to (e.g. `subscriber.created`). On update, the list supplied here replaces the endpoint's full subscription list. |
 
 #### revoke_previous_webhook_secret
@@ -2139,9 +1652,7 @@ kit-cli revoke-previous-webhook-secret --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `webhook_endpoint_id` | schema | Yes | Positive webhook endpoint id. |
 
 #### rotate_webhook_secret
@@ -2153,13 +1664,9 @@ kit-cli rotate-webhook-secret --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `webhook_endpoint_id` | schema | Yes | Positive webhook endpoint id. |
-
 | `force` | boolean | No | Rotating again while a previous rotation's overlap window is still open returns `409` (see the responses below). Pass `true` to rotate anyway, immediately expiring the older secret. |
-
 | `secret_name` | string | Yes | New private filename under KIT_PRIVATE_DIR. Required before creating/rotating a signing secret; never overwritten. |
 
 #### list_webhooks
@@ -2171,19 +1678,12 @@ kit-cli list-webhooks --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | schema | No | See the exact input schema. |
-
 | `before` | schema | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | schema | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### create_webhook
@@ -2195,11 +1695,8 @@ kit-cli create-webhook --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `target_url` | string | Body | See the exact input schema. |
-
 | `event` | object | Body | See the exact input schema. |
 
 #### delete_webhook
@@ -2211,9 +1708,7 @@ kit-cli delete-webhook --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `webhook_id` | schema | Yes | Positive webhook id. |
 
 #### search_subscribers
@@ -2225,39 +1720,22 @@ kit-cli search-subscribers --help
 ```
 
 | Argument | Type | Required | Meaning |
-
 | --- | --- | --- | --- |
-
 | `after` | string/null | No | See the exact input schema. |
-
 | `before` | string/null | No | See the exact input schema. |
-
 | `created_after` | string | No | See the exact input schema. |
-
 | `created_before` | string | No | See the exact input schema. |
-
 | `email_address` | string | Yes | See the exact input schema. |
-
 | `include` | string | No | See the exact input schema. |
-
 | `include_total_count` | boolean | No | See the exact input schema. |
-
 | `per_page` | number/null | No | See the exact input schema. |
-
 | `slim` | boolean | No | See the exact input schema. |
-
 | `sort_field` | string | No |  Values: `id`, `created_at`, `updated_at`, `cancelled_at`, `canceled_at`, `engagement__sent`, `engagement__opens`, `engagement__clicks`, `engagement__open_rate`, `engagement__click_rate`. |
-
 | `sort_order` | string | No |  Values: `asc`, `desc`. |
-
 | `status` | string | No |  Values: `active`, `inactive`, `bounced`, `complained`, `cancelled`, `all`. |
-
 | `updated_after` | string | No | See the exact input schema. |
-
 | `updated_before` | string | No | See the exact input schema. |
-
 | `all_pages` | boolean | No | Read successive cursor pages, bounded by max_items (default 1000). Default false returns one API page. |
-
 | `max_items` | integer | No | Maximum records when all_pages=true. A capped result reports truncation and its continuation cursor. |
 
 #### list_accounts
