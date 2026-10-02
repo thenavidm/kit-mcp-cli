@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { buildServer,VERSION } from "./server.js";
-import { runCli } from "./cli.js";
+import { runCli, exitCodeFor } from "./cli.js";
 import { runDoctor } from "./doctor.js";
 import { basename } from "node:path";
 const HELP=`Kit MCP server and CLI ${VERSION}
@@ -38,4 +38,4 @@ async function main():Promise<void> {
  const server=buildServer();await server.connect(new StdioServerTransport());
  const close=async()=>{await server.close();process.exit(0);};process.on("SIGTERM",()=>void close());process.on("SIGINT",()=>void close());
 }
-main().catch(e=>{console.error(JSON.stringify({error:e.message}));process.exitCode=5;});
+main().catch(e=>{console.error(JSON.stringify({error:e.message}));process.exitCode=exitCodeFor(e.message);});

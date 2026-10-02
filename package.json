@@ -1,6 +1,6 @@
 {
   "name": "@thenavidm/kit-mcp-cli",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Kit MCP server and CLI for Claude Code and AI agents. Subscribers, tags, broadcasts, sequences, email stats, forms, snippets, purchases, webhooks, bulk operations and API v4.",
   "type": "module",
   "main": "./dist/index.js",

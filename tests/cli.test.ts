@@ -99,3 +99,20 @@ describe("parity with the real server", () => {
     expect(isCliCommand([], ["x"])).toBe(false);
   });
 });
+
+// Exercise the shipped router, including doctor, rather than only the classifier.
+describe("invalid private configuration through the real binary", () => {
+  it.each([
+    {KIT_REQUEST_TIMEOUT_MS: "bad"},
+    {KIT_ACCOUNTS: "not-json"},
+    {KIT_ACCOUNTS: '[{"name":""}]'},
+    {KIT_ACCOUNTS: '[{"name":"same"},{"name":"same"}]'},
+  ])("doctor exits 10 for %j", async (settings) => {
+    const {spawnSync} = await import("node:child_process");
+    const clean = Object.fromEntries(Object.entries(process.env).filter(([k]) => !k.startsWith("KIT_")));
+    const result = spawnSync(process.execPath, ["dist/index.js", "doctor"], {encoding:"utf8", env:{...clean, ...settings}, timeout:10000});
+    expect(result.status).toBe(10);
+    expect(result.stdout).toBe("");
+    expect(JSON.parse(result.stderr)).toHaveProperty("error");
+  });
+});

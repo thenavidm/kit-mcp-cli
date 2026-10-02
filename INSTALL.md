@@ -6,7 +6,7 @@ One npm package includes both binaries and all **85 tools**. Requires Node.js 22
 | --- | --- | --- |
 | Terminal | kit-cli | Scripts and agents with a shell |
 | Local MCP | kit-mcp | AI clients supporting stdio |
-| Desktop archive | kit-2.0.1.mcpb | Compatible Claude Desktop custom extensions |
+| Desktop archive | kit-2.0.2.mcpb | Compatible Claude Desktop custom extensions |
 | Kit-hosted alternative | https://app.kit.com/mcp | Official remote OAuth, paid Creator/Creator Pro |
 
 ## Contents
@@ -105,7 +105,7 @@ env_vars = ["KIT_API_KEY", "KIT_TOKENS_FILE"]
 
 ### Install the .mcpb extension
 
-1. Download `kit-2.0.1.mcpb` from [GitHub Releases](https://github.com/thenavidm/kit-mcp-cli/releases/latest).
+1. Download `kit-2.0.2.mcpb` from [GitHub Releases](https://github.com/thenavidm/kit-mcp-cli/releases/latest).
 2. In a supported Claude Desktop build, open **Settings > Extensions > Advanced settings > Install Extension…** and select it.
 3. Enter a v4 API key in the sensitive setting, or an absolute private OAuth token-file path. Leave the unused method empty.
 4. Enable read-only if you want only the 38 reads. Reconnect and ask for account verification.

@@ -1,59 +1,115 @@
-<p align="center"><img src="https://cdn.navid.me/brand/platforms/kit.png" width="80" alt="Kit" /></p>
+<img src="https://cdn.navid.me/brand/platforms/kit.png" alt="Kit" width="88">
 
-<h1 align="center">Kit MCP Server & CLI</h1>
+# Kit MCP Server & CLI
 
-<p align="center">Your newsletter, subscribers and email sequences. One package. MCP and a task CLI.</p>
+[![npm](https://img.shields.io/npm/v/@thenavidm/kit-mcp-cli?color=orange&label=npm)](https://www.npmjs.com/package/@thenavidm/kit-mcp-cli)
+[![CI](https://github.com/thenavidm/kit-mcp-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/thenavidm/kit-mcp-cli/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/License-AGPL--3.0-green)](./LICENSE)
+[![YouTube](https://img.shields.io/badge/YouTube-@thenavidm-red?logo=youtube&logoColor=white)](https://youtube.com/@thenavidm?sub_confirmation=1)
+[![X](https://img.shields.io/badge/X-@thenavidm-black?logo=x)](https://x.com/thenavidm)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-thenavidm-0A66C2?logo=linkedin&logoColor=white)](https://linkedin.com/in/thenavidm)
 
-<p align="center">
-<a href="https://www.npmjs.com/package/@thenavidm/kit-mcp-cli"><img src="https://img.shields.io/npm/v/@thenavidm/kit-mcp-cli" alt="npm version" /></a>
-<a href="https://github.com/thenavidm/kit-mcp-cli/actions/workflows/ci.yml"><img src="https://github.com/thenavidm/kit-mcp-cli/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-<a href="https://github.com/thenavidm/kit-mcp-cli/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0--or--later-blue" alt="AGPL-3.0-or-later" /></a>
-<img src="https://img.shields.io/badge/Node-22%2B-339933" alt="Node 22 or newer" />
-<img src="https://img.shields.io/badge/tools-85-blue" alt="85 tools" />
-</p>
+Kit MCP server and CLI for Claude Code, Codex and AI agents. **85 tools: 38 reads and 47 writes** for account data, newsletters, subscribers, tags, forms, sequences, snippets, statistics, bulk work and webhooks.
 
-<p align="center"><a href="./INSTALL.md">Install</a> · <a href="./SKILL.md">Agent skill</a> · <a href="./COMPARISON.md">Comparisons</a> · <a href="./CHANGELOG.md">Version history</a> · <a href="https://github.com/thenavidm/kit-mcp-cli/releases">Desktop releases</a></p>
+One package gives you two ways in: `kit-mcp` connects the tools to your AI app, and `kit-cli` makes the same tools shell commands. Claude Desktop also has a bundled `.mcpb` extension. The 40 audience, delivery, deletion and signing-secret operations require explicit confirmation.
 
-A local MCP server and a scriptable CLI for Kit API v4. Read account data, draft and schedule broadcasts, manage subscribers and tags, edit sequences and snippets, collect email statistics, and configure signed webhooks. **85 tools: 38 reads and 47 writes. 40 audience, delivery, deletion and secret operations require explicit confirmation.**
+Built and maintained by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=referral&utm_campaign=kit-mcp-cli&utm_content=readme). The installation guide is in [INSTALL.md](INSTALL.md); the matching navid.me CMS guide is prepared and its database sync remains pending.
 
-Kit has an [official account MCP](https://developers.kit.com/mcp/kit-mcp). It already maps the v4 API and supports both reads and writes. This package adds a standalone task CLI, named local accounts, private token-file refresh, bounded cursor aggregation and a downloadable desktop bundle. It does not claim extra API coverage or measured token savings over the official server. Choose the official remote server if you prefer Kit-managed OAuth and a hosted connection.
+<img src="https://cdn.navid.me/repos/kit-mcp-cli.gif" alt="Illustrated Kit workflow in the same terminal component used on navid.me" width="520">
 
-The wrapper is free software under its existing AGPL-3.0-or-later license. Kit account access, plan eligibility and service charges remain separate. This is a community integration by Navid Moazzez, not a Kit-endorsed product.
+The terminal illustrates shipped tool names and the requested draft workflow. It is a presentation preview, not a live account transcript.
 
+You need a **Kit v4 API key** or an authorized OAuth session. Some endpoints require OAuth; account permissions and plan eligibility still apply. The wrapper is free software under AGPL-3.0-or-later. Kit service charges remain separate. This is a community integration, not a Kit-endorsed product.
 
-<p align="center"><img src="https://cdn.navid.me/repos/kit-mcp-cli.gif" alt="Kit MCP and CLI draft workflow, illustrated in the house terminal" width="520" /></p>
+Kit already has an [official account MCP](https://developers.kit.com/mcp/kit-mcp) with v4 reads and writes. This package adds a task CLI, private named accounts, bounded cursor aggregation, private token refresh and a desktop bundle. It does not claim more API coverage or measured token savings over the official server.
 
-The terminal illustrates the requested draft workflow; it is not a live account transcript.
+**Validation:** build, typecheck, 40 behavior/CLI checks, public npm installation and desktop protocol discovery are checked. Live account writes, actual desktop GUI installation and fresh token/task benchmarks remain pending.
 
-The matching navid.me guide is prepared with 20 FAQs; authenticated CMS sync is pending. The installation and operation references in this repository are available now.
+## Two ways to use it
+
+### Command line
+
+```bash
+npm install -g @thenavidm/kit-mcp-cli@latest
+kit-cli
+kit-cli list-broadcasts --help
+kit-cli schema create-broadcast
+kit-cli get-account --agent
+kit-cli list-broadcasts --per-page 5 --agent
+kit-cli create-broadcast --subject "This week's creator notes" --content '<p>Your newsletter content.</p>' --confirm --agent
+```
+
+Configure credentials privately first. Draft creation defaults private and unscheduled. `--confirm` authorizes the requested operation; `--agent` and `--yes` never bypass that guard.
+
+### MCP server, for your AI app
+
+```bash
+claude mcp add --scope user kit -- npx -y @thenavidm/kit-mcp-cli@latest
+```
+
+Then ask: *"Draft my next newsletter privately. Show me the draft and leave it unscheduled."* Confirm only the requested account action.
+
+All client configurations and operating-system steps are in [INSTALL.md](INSTALL.md).
+
+### Which one
+
+| Where you work | What to use |
+| --- | --- |
+| Claude Code, Codex, Cursor or another agent with a terminal | MCP, CLI or both |
+| Claude Desktop chat | The local MCP server or desktop extension |
+| Scripts, cron or CI | CLI commands, or MCP through an MCP client |
+| A web client that accepts only a remote MCP URL | Kit's official hosted MCP; this package exposes local stdio |
+
+## Features
+
+| Capability | CLI command | MCP tool |
+| --- | --- | --- |
+| Account and growth | `kit-cli get-account` / `get-growth-stats` | `get_account` / `get_growth_stats` |
+| Recent newsletters | `kit-cli list-broadcasts` | `list_broadcasts` |
+| Draft and schedule | `kit-cli create-broadcast` / `update-broadcast` | `create_broadcast` / `update_broadcast` |
+| Newsletter statistics | `kit-cli get-broadcast-stats` / `get-broadcast-clicks` | `get_broadcast_stats` / `get_broadcast_clicks` |
+| Subscriber lookup | `kit-cli search-subscribers` | `search_subscribers` |
+| Subscribers and tags | `kit-cli list-subscribers` / `list-tags` / `tag-subscriber` | `list_subscribers` / `list_tags` / `tag_subscriber` |
+| Sequences | `kit-cli list-sequences` | `list_sequences` |
+| Templates | `kit-cli list-email-templates` | `list_email_templates` |
+| Signed webhook endpoints | `kit-cli create-webhook-endpoint` | `create_webhook_endpoint` |
+| Private named accounts | `kit-cli list-accounts` | `list_accounts` |
+| Diagnose setup | `kit-cli doctor` | CLI utility |
 
 ## Contents
 
-| Section | What you will find |
-| --- | --- |
-| [1. What it does](#1-what-it-does) | Coverage and limits |
-| [2. Quick start](#2-quick-start) | Install, discover and authenticate |
-| [3. MCP or CLI](#3-mcp-or-cli) | The same handlers in two surfaces |
-| [4. Client setup](#4-client-setup) | Every supported client and desktop route |
-| [5. CLI contract](#5-cli-contract) | Flags, JSON, nested bodies and exit codes |
-| [6. Authentication and accounts](#6-authentication-and-accounts) | API keys, OAuth and account selection |
-| [7. Newsletter workflows](#7-newsletter-workflows) | Draft, review, schedule and inspect |
-| [8. Subscriber workflows](#8-subscriber-workflows) | Filters, tags, forms and sequences |
-| [9. Pagination and bulk work](#9-pagination-and-bulk-work) | Cursors, limits and async results |
-| [10. Webhooks](#10-webhooks) | Private signing secrets |
-| [11. Every tool](#11-every-tool) | Complete operations, schemas and arguments |
-| [12. Safety and your data](#12-safety-and-your-data) | Guards, retries, audit and privacy |
-| [13. Official and community comparisons](#13-official-and-community-comparisons) | Source-backed differences |
-| [14. Token and task comparisons](#14-token-and-task-comparisons) | What is measured and what is pending |
-| [15. Settings](#15-settings) | All environment variables |
-| [16. Troubleshooting](#16-troubleshooting) | Common failures and remedies |
-| [17. Frequently asked questions](#17-frequently-asked-questions) | Setup, delivery, templates and costs |
-| [18. Development and releases](#18-development-and-releases) | Reproducible schemas, tests and artifacts |
-| [19. Version history](#19-version-history) | Migration from the private legacy source |
-| [About the author](#about-the-author) | Navid Media and links |
+| Number | Section | What it covers |
+| --- | --- | --- |
+| 1 | [What you can ask it](#1-what-you-can-ask-it) | Practical prompts, coverage and validation |
+| 2 | [Quick install](#2-quick-install) | Install, discover and authenticate |
+| 3 | [Set up Kit access](#3-set-up-kit-access) | API keys, OAuth and revocation |
+| 4 | [Connect your client](#4-connect-your-client) | Every client and desktop route |
+| 5 | [Check it works](#5-check-it-works) | Doctor and the first account read |
+| 6 | [Output, flags and exit codes](#6-output-flags-and-exit-codes) | Scripts, JSON and nested bodies |
+| 7 | [MCP or CLI and token cost](#7-mcp-or-cli-and-token-cost) | Surface choices and measurement |
+| 8 | [Every tool and argument](#8-every-tool-and-argument) | All 85 tools and their arguments |
+| 9 | [Newsletter and subscriber workflows](#9-newsletter-and-subscriber-workflows) | Draft, review, schedule and manage audiences |
+| 10 | [Pagination, bulk work and webhooks](#10-pagination-bulk-work-and-webhooks) | Cursors, asynchronous jobs and private secrets |
+| 11 | [Several private accounts](#11-several-private-accounts) | Account selection and isolation |
+| 12 | [Writing safely](#12-writing-safely) | Confirmation, read-only and retries |
+| 13 | [How it works](#13-how-it-works) | Shared handlers, schemas and development |
+| 14 | [Your data](#14-your-data) | Credentials, local files and privacy |
+| 15 | [Environment variables](#15-environment-variables) | Credentials, safety and tuning |
+| 16 | [Updates and removal](#16-updates-and-removal) | npm, desktop, disconnecting and migration |
+| 17 | [Troubleshooting](#17-troubleshooting) | Symptoms and fixes |
+| 18 | [API coverage and comparisons](#18-api-coverage-and-comparisons) | Official and community alternatives |
+| 19 | [Versions](#19-versions) | Component versions, releases and history |
+| 20 | [FAQ](#20-faq) | Common questions |
 
 
-## 1. What it does
+## 1. What you can ask it
+
+- Show my latest five newsletters and their statistics.
+- Draft my next newsletter privately and leave it unscheduled.
+- Find this subscriber by exact email and show their tags.
+- Read the current audience before applying the tag I requested.
+- List available sequences and templates.
+- Create the requested signed webhook and save its signing secret privately.
 
 The pinned official API v4 snapshot contains 83 operations. This server exposes each one, plus `list_accounts` and the `search_subscribers` compatibility alias. The snapshot source, date, hash and reviewed corrections are in [api-source.json](./src/tools/api-source.json).
 
@@ -74,11 +130,11 @@ The API does not provide all Kit UI actions. This package does not promise visua
 
 ### What was actually checked
 
-| Check | Status for 2.0.0 |
+| Check | Status for 2.0.2 |
 | --- | --- |
 | Official API snapshot | 83 operations, pinned on 2026-10-02 |
 | Real local MCP discovery | 85 tools, or 38 with read-only enabled |
-| Behavior and shared CLI | 36 checks passed against controlled HTTP fixtures |
+| Behavior and shared CLI | 40 checks passed against controlled HTTP fixtures |
 | TypeScript | Build and typecheck passed |
 | Production dependency audit | Zero findings at review time |
 | Live account reads and writes | Pending a configured v4 key or authorized OAuth session |
@@ -87,7 +143,7 @@ The API does not provide all Kit UI actions. This package does not promise visua
 
 Fixture tests check request construction and guards. They do not establish that a particular Kit account or email template accepts a live write. Release artifact checks are reported in the release notes when completed.
 
-## 2. Quick start
+## 2. Quick install
 
 Install Node.js 22 or newer, then:
 
@@ -119,22 +175,38 @@ npx -y --package @thenavidm/kit-mcp-cli@latest kit-cli tools
 
 [INSTALL.md](./INSTALL.md) covers Node/PATH on macOS, Windows and Linux, private account setup, every client, updates and removal. No `.env` file is loaded automatically.
 
-## 3. MCP or CLI
+## 3. Set up Kit access
 
-| Surface | How it runs | Suitable for |
-| --- | --- | --- |
-| `kit-mcp` | Local stdio server launched by an MCP client | Natural language account work in a compatible AI app |
-| `kit-cli` | Schema-derived commands with machine-readable output | Scripts, CI and agents with shell access |
-| `kit-2.0.1.mcpb` | Local MCP server with bundled production dependencies | Claude Desktop custom extensions |
-| Official Kit MCP | Hosted `https://app.kit.com/mcp` with Kit OAuth | Remote connections and browser-only AI clients |
+### Personal v4 API key
 
-The CLI creates a real MCP server and client connected through the SDK's in-memory transport. It discovers the server's tools and calls the same schemas, validation, handlers and safety guards. Separate handwritten CLI request logic cannot drift from the MCP path.
+Open [Kit's Developer settings](https://app.kit.com/account_settings/developer_settings), click **Add a new key**, name it and save the value privately when shown. Kit does not let you view that value again afterwards. Set `KIT_API_KEY` in your local shell or client settings. The server sends it in `X-Kit-Api-Key`, never a URL query string. Old v3 API secrets are not interchangeable.
 
-An MCP client may send tool schemas or deferred tool names into model context. A shell agent instead needs the skill, help, commands and results. Both consume tokens; neither surface guarantees lower total cost for every task.
+Kit documents 120 requests over a rolling 60 seconds per API key and 600 for OAuth API access. The official hosted MCP separately documents 120/minute per token. This wrapper spaces calls per account by 550 ms for keys and 110 ms for OAuth. Other processes using the same credential also count against Kit's limits.
 
-`kit-cli` with no arguments lists commands. `kit-mcp` with no arguments starts stdio and does not print a banner. Avoid launching an interactive banner on an MCP server's stdout.
+### OAuth for full endpoint eligibility
 
-## 4. Client setup
+Bulk and purchase endpoints in the tool table are marked OAuth-only. Create your own Kit app and enable API access, then implement the official [OAuth authorization flow](https://developers.kit.com/api-reference/oauth-refresh-token-flow) or Kit's [Node example](https://github.com/Kit/app-examples/tree/e627873f4a37dffcb3796b3a5ff25d4f108944c4/oauth-express). Keep the app's secret on a private confidential backend. Use the callback URI exactly as registered, a cryptographically random state verified on callback, and HTTPS for a hosted callback.
+
+The current authorization and token endpoints are `https://api.kit.com/v4/oauth/authorize` and `https://api.kit.com/v4/oauth/token`. There is no built-in OAuth consent service in this package. The old source's `app.kit.com/oauth/token` examples are obsolete. Follow Kit's current registered-app instructions; do not invent unsupported fine-grained OAuth scopes from operation-schema security labels.
+
+A private token file can contain:
+
+```json
+{
+  "access_token": "YOUR_OAUTH_ACCESS_TOKEN",
+  "refresh_token": "YOUR_OAUTH_REFRESH_TOKEN",
+  "client_id": "YOUR_OWN_KIT_APP_CLIENT_ID",
+  "client_secret": "YOUR_OWN_KIT_APP_CLIENT_SECRET",
+  "created_at": 1790899200,
+  "expires_in": 7200
+}
+```
+
+These are placeholders; use actual issued expiry metadata. Point `KIT_TOKENS_FILE` at an absolute private path outside the checkout. It must be a regular JSON file, at most 64 KB; symlinks are refused. Restrict access to your OS user. If expiry metadata is available, refresh happens one minute before expiry. Concurrent refreshes within the same process are deduplicated. Updated tokens are written atomically with mode 0600. On Windows, protect the enclosing folder using user-only ACLs; POSIX mode bits are not a complete Windows access policy.
+
+Alternatively set `KIT_ACCESS_TOKEN`, `KIT_REFRESH_TOKEN`, `KIT_CLIENT_ID` and `KIT_CLIENT_SECRET` privately. Without a token file, refresh state lasts only in that process. Without refresh credentials, renew an expired access token yourself. An OAuth access token takes precedence over an API key for the selected account.
+
+## 4. Connect your client
 
 The full commands and private configurations are in [INSTALL.md](./INSTALL.md). Common registrations, after privately configuring account credentials:
 
@@ -155,7 +227,19 @@ Desktop settings accept a sensitive API key or a private OAuth token-file path. 
 
 For shell agents, make [SKILL.md](./SKILL.md) available through the client's supported skills location. npm installation does not register the skill automatically.
 
-## 5. CLI contract
+## 5. Check it works
+
+```bash
+kit-cli --version
+kit-cli doctor
+kit-cli doctor --network
+kit-cli get-account --agent
+kit-cli list-broadcasts --per-page 1 --agent
+```
+
+Local discovery works without credentials. The local doctor checks configuration; the network doctor reads account identity without returning private account details. It never sends email or changes subscribers. A successful read does not establish every endpoint's eligibility or template compatibility.
+
+## 6. Output, flags and exit codes
 
 Tool names become dashed commands: `get_broadcast` becomes `kit-cli get-broadcast`. Both exact underscore tool names and dashed forms are accepted. Argument names have dashed aliases: `broadcast_id` is `--broadcast-id`. Use help and `schema` to discover each operation's current input.
 
@@ -212,157 +296,30 @@ The same applies to nullable text, thumbnail and other nullable fields. In an MC
 
 Errors are JSON on stderr. On success, field selection shapes output only; it does not limit Kit's original response or its API processing.
 
-## 6. Authentication and accounts
+## 7. MCP or CLI and token cost
 
-### Personal v4 API key
+| Surface | How it runs | Suitable for |
+| --- | --- | --- |
+| `kit-mcp` | Local stdio server launched by an MCP client | Natural language account work in a compatible AI app |
+| `kit-cli` | Schema-derived commands with machine-readable output | Scripts, CI and agents with shell access |
+| `kit-2.0.2.mcpb` | Local MCP server with bundled production dependencies | Claude Desktop custom extensions |
+| Official Kit MCP | Hosted `https://app.kit.com/mcp` with Kit OAuth | Remote connections and browser-only AI clients |
 
-Open [Kit's Developer settings](https://app.kit.com/account_settings/developer_settings), click **Add a new key**, name it and save the value privately when shown. Kit does not let you view that value again afterwards. Set `KIT_API_KEY` in your local shell or client settings. The server sends it in `X-Kit-Api-Key`, never a URL query string. Old v3 API secrets are not interchangeable.
+The CLI creates a real MCP server and client connected through the SDK's in-memory transport. It discovers the server's tools and calls the same schemas, validation, handlers and safety guards. Separate handwritten CLI request logic cannot drift from the MCP path.
 
-Kit documents 120 requests over a rolling 60 seconds per API key and 600 for OAuth API access. The official hosted MCP separately documents 120/minute per token. This wrapper spaces calls per account by 550 ms for keys and 110 ms for OAuth. Other processes using the same credential also count against Kit's limits.
+An MCP client may send tool schemas or deferred tool names into model context. A shell agent instead needs the skill, help, commands and results. Both consume tokens; neither surface guarantees lower total cost for every task.
 
-### OAuth for full endpoint eligibility
+`kit-cli` with no arguments lists commands. `kit-mcp` with no arguments starts stdio and does not print a banner. Avoid launching an interactive banner on an MCP server's stdout.
 
-Bulk and purchase endpoints in the tool table are marked OAuth-only. Create your own Kit app and enable API access, then implement the official [OAuth authorization flow](https://developers.kit.com/api-reference/oauth-refresh-token-flow) or Kit's [Node example](https://github.com/Kit/app-examples/tree/e627873f4a37dffcb3796b3a5ff25d4f108944c4/oauth-express). Keep the app's secret on a private confidential backend. Use the callback URI exactly as registered, a cryptographically random state verified on callback, and HTTPS for a hosted callback.
+### Measuring the context and task cost
 
-The current authorization and token endpoints are `https://api.kit.com/v4/oauth/authorize` and `https://api.kit.com/v4/oauth/token`. There is no built-in OAuth consent service in this package. The old source's `app.kit.com/oauth/token` examples are obsolete. Follow Kit's current registered-app instructions; do not invent unsupported fine-grained OAuth scopes from operation-schema security labels.
+No fresh Claude Code token benchmark is available for this version. There are no claimed savings or made-up token figures. `tools/list` and the installed skill are the actual inputs for a future measurement.
 
-A private token file can contain:
+Measure the same successful task with: baseline, MCP with eager tool loading, MCP with the client's normal deferred search, CLI with its installed skill, and the official Kit MCP when account authorization is available. Fix client/model versions, account, prompt, selected fields and result size. Record standing context separately from input/output/cache tokens, reasoning, command help, response data, latency and any service costs. Discovery alone does not measure completed-task cost.
 
-```json
-{
-  "access_token": "YOUR_OAUTH_ACCESS_TOKEN",
-  "refresh_token": "YOUR_OAUTH_REFRESH_TOKEN",
-  "client_id": "YOUR_OWN_KIT_APP_CLIENT_ID",
-  "client_secret": "YOUR_OWN_KIT_APP_CLIENT_SECRET",
-  "created_at": 1790899200,
-  "expires_in": 7200
-}
-```
+A sensible matched task reads the latest five broadcasts and their statistics into one compact summary. A draft-only write comparison must use a test account and explicit approval, and verify equal resulting drafts. Neither comparison should send newsletters during setup. Results remain pending until real client usage and successful task outcomes are captured.
 
-These are placeholders; use actual issued expiry metadata. Point `KIT_TOKENS_FILE` at an absolute private path outside the checkout. It must be a regular JSON file, at most 64 KB; symlinks are refused. Restrict access to your OS user. If expiry metadata is available, refresh happens one minute before expiry. Concurrent refreshes within the same process are deduplicated. Updated tokens are written atomically with mode 0600. On Windows, protect the enclosing folder using user-only ACLs; POSIX mode bits are not a complete Windows access policy.
-
-Alternatively set `KIT_ACCESS_TOKEN`, `KIT_REFRESH_TOKEN`, `KIT_CLIENT_ID` and `KIT_CLIENT_SECRET` privately. Without a token file, refresh state lasts only in that process. Without refresh credentials, renew an expired access token yourself. An OAuth access token takes precedence over an API key for the selected account.
-
-### Multiple accounts
-
-Set `KIT_ACCOUNTS` to a private JSON array. Its supported keys are `name`, `api_key`, `access_token`, `refresh_token`, `client_id`, `client_secret` and `tokens_file`. It replaces the single-account variables:
-
-```json
-[
-  {"name":"work","api_key":"YOUR_WORK_V4_KEY"},
-  {"name":"personal","tokens_file":"/absolute/private/path/personal-kit.json"}
-]
-```
-
-Set `KIT_DEFAULT_ACCOUNT=work`, then:
-
-```bash
-kit-cli list-accounts --agent
-kit-cli list-broadcasts --account work --per-page 10 --agent
-kit-cli get-growth-stats --account personal --agent
-```
-
-Names must be unique. `list_accounts` exposes labels, default choice and auth type only, never credentials or file paths. Guard logs omit account names. Separate processes are still preferable when you need strict account isolation.
-
-## 7. Newsletter workflows
-
-### Draft privately, review, then schedule
-
-A create call defaults to `public:false` and `send_at:null`. It creates a private unscheduled draft. It still requires confirmation because it changes account content and can accept delivery fields when explicitly supplied.
-
-```bash
-kit-cli list-email-templates --agent
-kit-cli create-broadcast --subject "This week's creator notes" --content '<p>Write the actual newsletter here.</p>' --confirm --agent --select broadcast.id,broadcast.subject,broadcast.send_at
-kit-cli get-broadcast --broadcast-id BROADCAST_ID_FROM_RESULT --agent
-```
-
-Positive IDs are returned by Kit; replace illustrative markers with real IDs. For an existing draft, validate the intended audience and delivery time before the separate confirmed update:
-
-```bash
-kit-cli update-broadcast --broadcast-id 123 --payload-file /absolute/private/path/schedule.json --confirm --agent
-```
-
-Your private `schedule.json` contains the ISO timestamp and the audience fields from the current schema, for example `send_at` with a timezone offset or UTC `Z`. `published_at` controls web publication metadata; **it is not the email send time**. Neither successful creation nor a local confirmation proves delivery. Read the broadcast and statistics afterwards.
-
-### Template HTML needs care
-
-The API's `content` is HTML; it is not Kit's visual editor block tree. Preserve the full email wrapper and required Liquid unsubscribe/address markup when replacing content. Retrieve an existing example and inspect the selected template before updating. Do not replace a whole template with one paragraph if you need its existing branding and legal footer.
-
-Kit's current OpenAPI prose contradicts itself around Starting point templates and required fields. This wrapper accepts a subject plus either `content` or `email_template_id`, allows nonempty partial broadcast updates, and exposes the documented `allow_starting_point` flag. These reviewed corrections are recorded with the snapshot. **Starting point behavior remains unverified against a live account**, so test with a private unscheduled draft and inspect it in Kit before any send.
-
-### Existing broadcasts and click reports
-
-```bash
-kit-cli list-broadcasts --per-page 10 --agent --select broadcasts.id,broadcasts.subject,pagination
-kit-cli get-broadcast-stats --broadcast-id 123 --agent
-kit-cli get-broadcast-clicks --broadcast-id 123 --agent
-```
-
-The client does not automatically retry POST, PUT, PATCH or DELETE requests. A timeout can have an unknown outcome. Check the existing draft or scheduled broadcast before repeating a write; sending twice cannot be undone by a retry wrapper.
-
-## 8. Subscriber workflows
-
-Find an exact email or read a bounded list, then choose a requested audience change:
-
-```bash
-kit-cli search-subscribers --email-address reader@example.com --agent
-kit-cli list-tags --agent
-kit-cli tag-subscriber --tag-id 123 --email-address reader@example.com --confirm --agent
-kit-cli list-subscriber-tags --subscriber-id 456 --agent
-```
-
-The `.example` address is illustrative. Do not add or tag real people without the requested account action. Tagging and form/sequence enrollment may trigger existing Kit automations.
-
-`filter_subscribers` is a read-only POST with nested `all`/`any` filters. Use its current schema and a private JSON body; it is not a v3 page-number endpoint. `search_subscribers` is an exact-email compatibility alias, not a fuzzy search engine.
-
-Sequences now have their own create/update/delete endpoints and individual email operations. Read their schemas and current delay units before using them. Sequence enrollment can deliver email through existing automation, so it is confirmed even if the API call itself merely adds a subscriber.
-
-Custom field and tag creation are reversible configuration writes, so they do not require `--confirm`; they still disappear in read-only mode. Deletions, audience changes, snippets that can affect email and purchases are guarded. The tool table labels every operation.
-
-## 9. Pagination and bulk work
-
-### Cursor pages
-
-Kit v4 uses `after`, `before`, `start_cursor` and `end_cursor`, not old v3 numeric `page` arguments. Default `per_page` is 500, maximum 1000. Ask for a small page when you only need a sample:
-
-```bash
-kit-cli list-subscribers --per-page 25 --include-total-count --agent
-kit-cli list-subscribers --after END_CURSOR_FROM_RESULT --per-page 25 --agent
-kit-cli list-subscribers --all-pages --max-items 1000 --agent
-```
-
-Do not supply both `before` and `after`. `all_pages` traverses forward and refuses `before`. It stops at `max_items` (default 1000, maximum 10000) or 100 pages, and refuses repeated cursors. It reduces each page size to the remaining cap so the returned end cursor does not skip unseen records. Aggregated output includes `collected`, `pages`, the last pagination object and `truncated`.
-
-`include_total_count` must be requested where supported; total count can add API work. `max_items` without `all_pages` is a usage error. This is bounded retrieval, not a backup/export guarantee for an entire large account.
-
-### OAuth-only bulk
-
-The full API snapshot supplies nested request schemas and endpoint-specific limits. Discover the body and put private batches outside the checkout:
-
-```bash
-kit-cli schema bulk-create-subscribers
-kit-cli bulk-create-subscribers --payload-file /absolute/private/path/subscribers.json --confirm --agent
-```
-
-Some bulk operations require a callback URL. Use HTTPS on a receiver you control and inspect its actual completion notification. The wrapper does not deploy or listen for callbacks. Split payloads according to Kit's current per-endpoint limits and the local 5 MB request cap. Do not retry an asynchronous submission merely because its completion has not arrived yet.
-
-## 10. Webhooks
-
-The current signed `webhook_endpoints` family and older `webhooks` are separate APIs. Prefer signed endpoints for new setups. Discover the accepted event enum from the current schema:
-
-```bash
-kit-cli schema create-webhook-endpoint
-kit-cli create-webhook-endpoint --url https://your-receiver.example/kit --events EVENT_FROM_SCHEMA --secret-name newsletter-hook --confirm --agent
-```
-
-Replace both placeholders with your own endpoint and a supported event. Creation and secret rotation require a new `secret_name`. Before the remote call, the server reserves that filename exclusively under `KIT_PRIVATE_DIR` (default `~/.config/kit-mcp-cli/secrets`) with mode 0600. Existing files are never overwritten.
-
-Returned signing secrets are redacted from model/CLI output and saved to the private file. The result exposes `secret_file`, not the secret itself. Configure your own receiver's signature verification privately. The package does not provide a receiver or claim that the endpoint is reachable. Protect private folders with Windows ACLs where applicable.
-
-When rotating, update and verify your receiver before revoking the previous secret. If Kit changed the endpoint but local secret storage failed, inspect the remote endpoint before attempting rotation again. Do not paste signing secrets in an AI chat or public issue.
-
-
-## 11. Every tool
+## 8. Every tool and argument
 
 The following catalog is generated from the actual `tools/list` result. Body-required fields are enforced within `payload` or individual body arguments at execution; path/query requirements appear in each input schema. `schema <command>` is the exact machine-readable reference. OAuth-only labels come from the pinned operation security definitions.
 
@@ -1748,166 +1705,133 @@ kit-cli list-accounts --help
 
 No arguments.
 
-## 12. Safety and your data
+## 9. Newsletter and subscriber workflows
+
+### Draft privately, review, then schedule
+
+A create call defaults to `public:false` and `send_at:null`. It creates a private unscheduled draft. It still requires confirmation because it changes account content and can accept delivery fields when explicitly supplied.
+
+```bash
+kit-cli list-email-templates --agent
+kit-cli create-broadcast --subject "This week's creator notes" --content '<p>Write the actual newsletter here.</p>' --confirm --agent --select broadcast.id,broadcast.subject,broadcast.send_at
+kit-cli get-broadcast --broadcast-id BROADCAST_ID_FROM_RESULT --agent
+```
+
+Positive IDs are returned by Kit; replace illustrative markers with real IDs. For an existing draft, validate the intended audience and delivery time before the separate confirmed update:
+
+```bash
+kit-cli update-broadcast --broadcast-id 123 --payload-file /absolute/private/path/schedule.json --confirm --agent
+```
+
+Your private `schedule.json` contains the ISO timestamp and the audience fields from the current schema, for example `send_at` with a timezone offset or UTC `Z`. `published_at` controls web publication metadata; **it is not the email send time**. Neither successful creation nor a local confirmation proves delivery. Read the broadcast and statistics afterwards.
+
+### Template HTML needs care
+
+The API's `content` is HTML; it is not Kit's visual editor block tree. Preserve the full email wrapper and required Liquid unsubscribe/address markup when replacing content. Retrieve an existing example and inspect the selected template before updating. Do not replace a whole template with one paragraph if you need its existing branding and legal footer.
+
+Kit's current OpenAPI prose contradicts itself around Starting point templates and required fields. This wrapper accepts a subject plus either `content` or `email_template_id`, allows nonempty partial broadcast updates, and exposes the documented `allow_starting_point` flag. These reviewed corrections are recorded with the snapshot. **Starting point behavior remains unverified against a live account**, so test with a private unscheduled draft and inspect it in Kit before any send.
+
+### Existing broadcasts and click reports
+
+```bash
+kit-cli list-broadcasts --per-page 10 --agent --select broadcasts.id,broadcasts.subject,pagination
+kit-cli get-broadcast-stats --broadcast-id 123 --agent
+kit-cli get-broadcast-clicks --broadcast-id 123 --agent
+```
+
+The client does not automatically retry POST, PUT, PATCH or DELETE requests. A timeout can have an unknown outcome. Check the existing draft or scheduled broadcast before repeating a write; sending twice cannot be undone by a retry wrapper.
+
+### Subscriber workflows
+
+Find an exact email or read a bounded list, then choose a requested audience change:
+
+```bash
+kit-cli search-subscribers --email-address reader@example.com --agent
+kit-cli list-tags --agent
+kit-cli tag-subscriber --tag-id 123 --email-address reader@example.com --confirm --agent
+kit-cli list-subscriber-tags --subscriber-id 456 --agent
+```
+
+The `.example` address is illustrative. Do not add or tag real people without the requested account action. Tagging and form/sequence enrollment may trigger existing Kit automations.
+
+`filter_subscribers` is a read-only POST with nested `all`/`any` filters. Use its current schema and a private JSON body; it is not a v3 page-number endpoint. `search_subscribers` is an exact-email compatibility alias, not a fuzzy search engine.
+
+Sequences now have their own create/update/delete endpoints and individual email operations. Read their schemas and current delay units before using them. Sequence enrollment can deliver email through existing automation, so it is confirmed even if the API call itself merely adds a subscriber.
+
+Custom field and tag creation are reversible configuration writes, so they do not require `--confirm`; they still disappear in read-only mode. Deletions, audience changes, snippets that can affect email and purchases are guarded. The tool table labels every operation.
+
+## 10. Pagination, bulk work and webhooks
+
+### Cursor pages
+
+Kit v4 uses `after`, `before`, `start_cursor` and `end_cursor`, not old v3 numeric `page` arguments. Default `per_page` is 500, maximum 1000. Ask for a small page when you only need a sample:
+
+```bash
+kit-cli list-subscribers --per-page 25 --include-total-count --agent
+kit-cli list-subscribers --after END_CURSOR_FROM_RESULT --per-page 25 --agent
+kit-cli list-subscribers --all-pages --max-items 1000 --agent
+```
+
+Do not supply both `before` and `after`. `all_pages` traverses forward and refuses `before`. It stops at `max_items` (default 1000, maximum 10000) or 100 pages, and refuses repeated cursors. It reduces each page size to the remaining cap so the returned end cursor does not skip unseen records. Aggregated output includes `collected`, `pages`, the last pagination object and `truncated`.
+
+`include_total_count` must be requested where supported; total count can add API work. `max_items` without `all_pages` is a usage error. This is bounded retrieval, not a backup/export guarantee for an entire large account.
+
+### OAuth-only bulk
+
+The full API snapshot supplies nested request schemas and endpoint-specific limits. Discover the body and put private batches outside the checkout:
+
+```bash
+kit-cli schema bulk-create-subscribers
+kit-cli bulk-create-subscribers --payload-file /absolute/private/path/subscribers.json --confirm --agent
+```
+
+Some bulk operations require a callback URL. Use HTTPS on a receiver you control and inspect its actual completion notification. The wrapper does not deploy or listen for callbacks. Split payloads according to Kit's current per-endpoint limits and the local 5 MB request cap. Do not retry an asynchronous submission merely because its completion has not arrived yet.
+
+### Signed webhooks
+
+The current signed `webhook_endpoints` family and older `webhooks` are separate APIs. Prefer signed endpoints for new setups. Discover the accepted event enum from the current schema:
+
+```bash
+kit-cli schema create-webhook-endpoint
+kit-cli create-webhook-endpoint --url https://your-receiver.example/kit --events EVENT_FROM_SCHEMA --secret-name newsletter-hook --confirm --agent
+```
+
+Replace both placeholders with your own endpoint and a supported event. Creation and secret rotation require a new `secret_name`. Before the remote call, the server reserves that filename exclusively under `KIT_PRIVATE_DIR` (default `~/.config/kit-mcp-cli/secrets`) with mode 0600. Existing files are never overwritten.
+
+Returned signing secrets are redacted from model/CLI output and saved to the private file. The result exposes `secret_file`, not the secret itself. Configure your own receiver's signature verification privately. The package does not provide a receiver or claim that the endpoint is reachable. Protect private folders with Windows ACLs where applicable.
+
+When rotating, update and verify your receiver before revoking the previous secret. If Kit changed the endpoint but local secret storage failed, inspect the remote endpoint before attempting rotation again. Do not paste signing secrets in an AI chat or public issue.
+
+## 11. Several private accounts
+
+Set `KIT_ACCOUNTS` to a private JSON array. Its supported keys are `name`, `api_key`, `access_token`, `refresh_token`, `client_id`, `client_secret` and `tokens_file`. It replaces the single-account variables:
+
+```json
+[
+  {"name":"work","api_key":"YOUR_WORK_V4_KEY"},
+  {"name":"personal","tokens_file":"/absolute/private/path/personal-kit.json"}
+]
+```
+
+Set `KIT_DEFAULT_ACCOUNT=work`, then:
+
+```bash
+kit-cli list-accounts --agent
+kit-cli list-broadcasts --account work --per-page 10 --agent
+kit-cli get-growth-stats --account personal --agent
+```
+
+Names must be unique. `list_accounts` exposes labels, default choice and auth type only, never credentials or file paths. Guard logs omit account names. Separate processes are still preferable when you need strict account isolation.
+
+## 12. Writing safely
 
 `KIT_READ_ONLY=1` hides every write, leaving 38 reads, and also refuses a direct write invocation. `KIT_ALLOW_DESTRUCTIVE=0` leaves tools visible but refuses the 40 guarded audience/delivery/deletion/secret operations. There is no `--agent` or `--yes` bypass. Confirmation means permission for the actual user-requested operation, not a blanket license to modify an account.
 
 Seven configuration writes (such as creating a tag or custom field) do not require confirmation. They are still writes and are blocked by read-only mode. Tool annotations describe read, destructive, idempotent and open-world behavior; application prompts remain client-dependent.
 
-Requests go directly to `https://api.kit.com/v4`; no Navid-hosted relay, analytics or telemetry is included. HTTP redirects are refused. Keys, OAuth tokens, client secrets and signing secrets are sanitized from tool results and reflected API errors. Subscriber addresses, email content, reports and other authorized response data are still private business data that your AI client can process. Configure its retention and sharing policy accordingly.
-
-Private OAuth files, webhook-secret files and optional audit files remain local. Audit records contain attempted write names, risk, surface, decision and outcome, without arguments, subscriber addresses, message bodies, account labels or credentials. Audit failure does not block a requested operation. It is a guard-decision log, not proof of remote delivery or complete Kit account audit history.
-
 GET 429 responses can retry up to two times by default, honoring a bounded delay. GET OAuth 401 can refresh and retry once. All mutating requests have **zero automatic retries**, including 429 and token expiry. A read-only filter POST also has no automatic retry. Treat service data as data, not instructions to execute an unrelated operation.
 
-See [SECURITY.md](./SECURITY.md) for disclosure, private file handling, dependency limitations and live-validation limits.
-
-## 13. Official and community comparisons
-
-| Offering | Surface | What the reviewed source establishes | Tradeoff |
-| --- | --- | --- | --- |
-| [Official Kit account MCP](https://developers.kit.com/mcp/kit-mcp) | Remote MCP, Kit OAuth | v4 account reads and writes; paid Creator/Creator Pro; 120 requests/min/token | Hosted consent/setup; standalone task CLI not identified there |
-| [Kit Developer Docs MCP](https://developers.kit.com/mcp/kit-developer-docs-mcp) | Documentation MCP | Read documentation | No account operations |
-| This package | Local stdio, CLI, desktop archive | 83 pinned operations + 2 helpers, private account settings and guards | You maintain local credentials; live writes pending |
-| [ArtisanPack UI ConvertKit](https://github.com/ArtisanPack-UI/convertkit) | PHP/Laravel integration and Artisan commands | Kit integration with framework commands | Requires the Laravel application environment |
-| [CData ConvertKit CLI](https://www.cdata.com/kb/tech/convertkit-jdbc-cli-github-copilot.rst) | Provider data-access CLI | JDBC-backed data access from a CLI | Different provider/license and data-oriented scope |
-
-[COMPARISON.md](./COMPARISON.md) records dated primary sources, scope and limitations. Counts are package discovery results, not evidence that the official server has fewer endpoints. No competitor latency, success rate or total token cost has been measured here.
-
-## 14. Token and task comparisons
-
-No fresh Claude Code token benchmark is available for this version. There are no claimed savings or made-up token figures. `tools/list` and the installed skill are the actual inputs for a future measurement.
-
-Measure the same successful task with: baseline, MCP with eager tool loading, MCP with the client's normal deferred search, CLI with its installed skill, and the official Kit MCP when account authorization is available. Fix client/model versions, account, prompt, selected fields and result size. Record standing context separately from input/output/cache tokens, reasoning, command help, response data, latency and any service costs. Discovery alone does not measure completed-task cost.
-
-A sensible matched task reads the latest five broadcasts and their statistics into one compact summary. A draft-only write comparison must use a test account and explicit approval, and verify equal resulting drafts. Neither comparison should send newsletters during setup. Results remain pending until real client usage and successful task outcomes are captured.
-
-## 15. Settings
-
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `KIT_API_KEY` | `Empty` | Personal v4 API key |
-| `KIT_ACCESS_TOKEN` | `Empty` | Existing OAuth access token |
-| `KIT_REFRESH_TOKEN` | `Empty` | OAuth refresh token |
-| `KIT_CLIENT_ID` | `Empty` | Your authorized Kit app ID |
-| `KIT_CLIENT_SECRET` | `Empty` | Your private confidential-app secret |
-| `KIT_TOKENS_FILE` | `Empty` | Regular private OAuth JSON, max 64 KB |
-| `KIT_ACCOUNTS` | `Empty` | Private JSON named accounts; replaces single-account settings |
-| `KIT_DEFAULT_ACCOUNT` | `First account` | Default name from KIT_ACCOUNTS |
-| `KIT_READ_ONLY` | `0` | 1 or true hides and refuses all 47 writes |
-| `KIT_ALLOW_DESTRUCTIVE` | `1` | 0 or false blocks all 40 guarded operations even with confirm |
-| `KIT_AUDIT_LOG` | `None` | Local attempted-write guard log, no request fields |
-| `KIT_PRIVATE_DIR` | `~/.config/kit-mcp-cli/secrets` | Private signing-secret folder |
-| `KIT_REQUEST_TIMEOUT_MS` | `30000` | Per-request deadline, integer 100–300000 |
-| `KIT_MAX_RETRIES` | `2` | GET 429 retries only, integer 0–5 |
-| `KIT_MIN_REQUEST_INTERVAL_MS` | `0 = automatic` | 0 chooses 550 ms keys / 110 ms OAuth; otherwise 1–10000 ms |
-
-The package reads environment variables only. It does not automatically load `.env`, resolve a secret-manager account, or inherit GUI environment values from a terminal. Private client config examples are in INSTALL.md. Never put real credentials in project MCP files.
-
-## 16. Troubleshooting
-
-| Symptom | Resolution |
-| --- | --- |
-| Binary not found | Install Node 22+, check npm global prefix/PATH, reopen terminal |
-| PowerShell blocks npm.ps1 | Use npm.cmd or Command Prompt in accordance with your policy |
-| Local doctor exit 10 | Configure a v4 key or regular OAuth token file in private settings |
-| GUI works differently from terminal | GUI clients often do not inherit shell env; configure private client env |
-| API 401 | Verify v4 credentials; OAuth may be expired or revoked |
-| API 403 / OAuth required | Check current plan permissions and use OAuth for that endpoint |
-| Read-only missing tools | Set KIT_READ_ONLY=0 only when writes are wanted; reconnect |
-| Confirmation refused | Supply confirm:true/--confirm only for an explicitly requested operation; check destructive policy |
-| Invalid request body | Read schema; use payload for nested fields/null; avoid mixing body forms |
-| No results beyond the first page | Follow end_cursor or use bounded all_pages |
-| 429 | Wait; other integrations share the credential limit; do not blindly retry writes |
-| Write timeout | Outcome may be unknown; inspect the account before repeating |
-| Template or Starting point error | See recorded schema contradictions and test an unscheduled private draft |
-| Secret filename exists | Choose a new private secret_name; files are never overwritten |
-| Refresh succeeds but file update fails | Repair private folder access and inspect state before another write |
-| Desktop extension rejected | Validate host custom-extension policy and compatible runtime; try manual stdio setup |
-
-## 17. Frequently asked questions
-
-### Is Kit free to use here?
-
-The wrapper is free AGPL software. Your Kit subscription and API eligibility are separate. The official Kit MCP is available on paid Creator and Creator Pro plans; consult Kit for your account’s API access.
-
-### Does Kit already have an official MCP?
-
-Yes. Its account server supports reads and writes across v4. Its separate developer-docs MCP reads documentation and cannot act on your account.
-
-### Why use this if the official one exists?
-
-Use it for standalone task commands, shell automation, private named-account settings, token-file refresh, bounded pagination or a local desktop archive. Use Kit’s official server for Kit-managed hosted OAuth. Neither is declared universally better.
-
-### Is there an official Kit CLI?
-
-No standalone email-account task CLI was identified in the official developer surfaces reviewed on 2026-10-02. Framework-specific and data-provider CLIs exist; see COMPARISON.md.
-
-### Are all 85 tools available with an API key?
-
-Discovery shows them, but OAuth-only bulk and purchase endpoints reject API-key calls before HTTP. The tool table marks them. Use an authorized OAuth session for those operations.
-
-### Do I need to give the AI my key?
-
-No. Configure it privately in your shell or client settings. Help, discovery and schemas work without it.
-
-### Does login sign me in?
-
-No. It explains first-time key/OAuth setup. This package does not host a consent flow or copy your browser cookies.
-
-### Can I use Claude Desktop?
-
-Yes, through local stdio configuration or the custom .mcpb release. GUI installation of this version remains a separate host check.
-
-### Can I use ChatGPT on the web?
-
-This local package does not expose an HTTPS connector. Use Kit’s official remote MCP for a compatible web connector.
-
-### Will creating a broadcast immediately send it?
-
-The wrapper defaults create to private and unscheduled. If you explicitly pass send_at or publication fields, they can change that behavior. All broadcast writes require confirmation; review in Kit before delivery.
-
-### Is published_at the schedule time?
-
-No. Use send_at for email delivery. published_at concerns web publication.
-
-### How do I clear a schedule?
-
-Use update_broadcast with a JSON body containing send_at:null, then inspect the broadcast. A shell string null is not JSON null.
-
-### Can I preserve my designed email template?
-
-Inspect existing template HTML and required Liquid/footer markup before changing content. The API is not a visual block editor. Starting point schema conflicts remain live-account validation pending.
-
-### Can tags send email indirectly?
-
-Yes, existing automations can react to tagging, form subscription or sequence enrollment. Those operations require explicit confirmation here.
-
-### Will the CLI retry a failed send?
-
-No. Mutating requests are never automatically retried. A timeout may have an unknown outcome; inspect the account first.
-
-### Can I connect multiple accounts?
-
-Yes. Use a private KIT_ACCOUNTS array with unique names, then --account. list_accounts returns labels/auth methods without credentials.
-
-### How do I retrieve more than one page?
-
-Use after or bounded all_pages/max_items. v4 uses cursors. Aggregate output exposes the last cursor and truncation; it is not an unlimited export.
-
-### Where do webhook secrets go?
-
-New signed endpoint secrets go to exclusive owner-only files under KIT_PRIVATE_DIR and are redacted from returned tool data. Configure your own receiver privately.
-
-### Is it more token-efficient than official MCP?
-
-That has not been measured. Model context, discovery, skill, command help, results, cache and task length all matter. No invented savings are advertised.
-
-### Can I migrate my old private setup?
-
-Create new private settings with a v4 key or authorized OAuth token file. Do not copy old personal SKILL content, cookies or source history into a public repo. See the 2.0 migration notes.
-
-## 18. Development and releases
+## 13. How it works
 
 ```bash
 git clone https://github.com/thenavidm/kit-mcp-cli.git
@@ -1929,7 +1853,92 @@ The npm allowlist includes built code, full setup/skill/comparison/changelog/sec
 
 Issues and reproducible bug reports are welcome. This repository does not accept unsolicited pull requests; see [CONTRIBUTING.md](./CONTRIBUTING.md). Use private vulnerability reporting for security issues.
 
-## 19. Version history
+## 14. Your data
+
+Requests go directly to `https://api.kit.com/v4`; no Navid-hosted relay, analytics or telemetry is included. HTTP redirects are refused. Keys, OAuth tokens, client secrets and signing secrets are sanitized from tool results and reflected API errors. Subscriber addresses, email content, reports and other authorized response data are still private business data that your AI client can process. Configure its retention and sharing policy accordingly.
+
+Private OAuth files, webhook-secret files and optional audit files remain local. Audit records contain attempted write names, risk, surface, decision and outcome, without arguments, subscriber addresses, message bodies, account labels or credentials. Audit failure does not block a requested operation. It is a guard-decision log, not proof of remote delivery or complete Kit account audit history.
+
+See [SECURITY.md](./SECURITY.md) for disclosure, private file handling, dependency limitations and live-validation limits.
+
+## 15. Environment variables
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `KIT_API_KEY` | `Empty` | Personal v4 API key |
+| `KIT_ACCESS_TOKEN` | `Empty` | Existing OAuth access token |
+| `KIT_REFRESH_TOKEN` | `Empty` | OAuth refresh token |
+| `KIT_CLIENT_ID` | `Empty` | Your authorized Kit app ID |
+| `KIT_CLIENT_SECRET` | `Empty` | Your private confidential-app secret |
+| `KIT_TOKENS_FILE` | `Empty` | Regular private OAuth JSON, max 64 KB |
+| `KIT_ACCOUNTS` | `Empty` | Private JSON named accounts; replaces single-account settings |
+| `KIT_DEFAULT_ACCOUNT` | `First account` | Default name from KIT_ACCOUNTS |
+| `KIT_READ_ONLY` | `0` | 1 or true hides and refuses all 47 writes |
+| `KIT_ALLOW_DESTRUCTIVE` | `1` | 0 or false blocks all 40 guarded operations even with confirm |
+| `KIT_AUDIT_LOG` | `None` | Local attempted-write guard log, no request fields |
+| `KIT_PRIVATE_DIR` | `~/.config/kit-mcp-cli/secrets` | Private signing-secret folder |
+| `KIT_REQUEST_TIMEOUT_MS` | `30000` | Per-request deadline, integer 100–300000 |
+| `KIT_MAX_RETRIES` | `2` | GET 429 retries only, integer 0–5 |
+| `KIT_MIN_REQUEST_INTERVAL_MS` | `0 = automatic` | 0 chooses 550 ms keys / 110 ms OAuth; otherwise 1–10000 ms |
+
+The package reads environment variables only. It does not automatically load `.env`, resolve a secret-manager account, or inherit GUI environment values from a terminal. Private client config examples are in INSTALL.md. Never put real credentials in project MCP files.
+
+## 16. Updates and removal
+
+```bash
+npm install -g @thenavidm/kit-mcp-cli@latest
+kit-cli --version
+claude mcp remove --scope user kit
+codex mcp remove kit
+npm uninstall -g @thenavidm/kit-mcp-cli
+```
+
+Reinstall a newer desktop archive separately and restart affected clients. Remove manual client entries using its own settings. Uninstalling the package does not revoke Kit credentials, remove private token/secret files or unschedule email. Revoke/delete keys or authorized apps in Kit when appropriate. Inspect and remove private files yourself after preserving any receiver secrets still in use.
+
+Pin a reviewed version instead of @latest if your automation requires reproducibility. Check [CHANGELOG.md](./CHANGELOG.md) and [GitHub Releases](https://github.com/thenavidm/kit-mcp-cli/releases) before a major update. Do not roll back by blindly publishing an older version over an existing npm version.
+
+## 17. Troubleshooting
+
+| Symptom | Resolution |
+| --- | --- |
+| Binary not found | Install Node 22+, check npm global prefix/PATH, reopen terminal |
+| PowerShell blocks npm.ps1 | Use npm.cmd or Command Prompt in accordance with your policy |
+| Local doctor exit 10 | Configure a v4 key or regular OAuth token file in private settings |
+| GUI works differently from terminal | GUI clients often do not inherit shell env; configure private client env |
+| API 401 | Verify v4 credentials; OAuth may be expired or revoked |
+| API 403 / OAuth required | Check current plan permissions and use OAuth for that endpoint |
+| Read-only missing tools | Set KIT_READ_ONLY=0 only when writes are wanted; reconnect |
+| Confirmation refused | Supply confirm:true/--confirm only for an explicitly requested operation; check destructive policy |
+| Invalid request body | Read schema; use payload for nested fields/null; avoid mixing body forms |
+| No results beyond the first page | Follow end_cursor or use bounded all_pages |
+| 429 | Wait; other integrations share the credential limit; do not blindly retry writes |
+| Write timeout | Outcome may be unknown; inspect the account before repeating |
+| Template or Starting point error | See recorded schema contradictions and test an unscheduled private draft |
+| Secret filename exists | Choose a new private secret_name; files are never overwritten |
+| Refresh succeeds but file update fails | Repair private folder access and inspect state before another write |
+| Desktop extension rejected | Validate host custom-extension policy and compatible runtime; try manual stdio setup |
+
+## 18. API coverage and comparisons
+
+| Offering | Surface | What the reviewed source establishes | Tradeoff |
+| --- | --- | --- | --- |
+| [Official Kit account MCP](https://developers.kit.com/mcp/kit-mcp) | Remote MCP, Kit OAuth | v4 account reads and writes; paid Creator/Creator Pro; 120 requests/min/token | Hosted consent/setup; standalone task CLI not identified there |
+| [Kit Developer Docs MCP](https://developers.kit.com/mcp/kit-developer-docs-mcp) | Documentation MCP | Read documentation | No account operations |
+| This package | Local stdio, CLI, desktop archive | 83 pinned operations + 2 helpers, private account settings and guards | You maintain local credentials; live writes pending |
+| [ArtisanPack UI ConvertKit](https://github.com/ArtisanPack-UI/convertkit) | PHP/Laravel integration and Artisan commands | Kit integration with framework commands | Requires the Laravel application environment |
+| [CData ConvertKit CLI](https://www.cdata.com/kb/tech/convertkit-jdbc-cli-github-copilot.rst) | Provider data-access CLI | JDBC-backed data access from a CLI | Different provider/license and data-oriented scope |
+
+[COMPARISON.md](./COMPARISON.md) records dated primary sources, scope and limitations. Counts are package discovery results, not evidence that the official server has fewer endpoints. No competitor latency, success rate or total token cost has been measured here.
+
+## 19. Versions
+
+| Component | Version / source |
+| --- | --- |
+| This package and desktop manifest | 2.0.2 |
+| Runtime | Node 22 or newer |
+| Kit API | v4; 83 reviewed operations from the 2026-10-02 snapshot |
+| MCP SDK | ^1.31.0 |
+| Source provenance | [api-source.json](src/tools/api-source.json), with SHA-256 and corrections |
 
 [CHANGELOG.md](./CHANGELOG.md) records dated changes and validation. Version 2.0.0 replaces the private 1.0.0 source with a sanitized public v4 implementation. It preserves the AGPL license and useful operation names, and adds the CLI and desktop surface.
 
@@ -1945,10 +1954,151 @@ The old source's private account instructions and original commits remain privat
 - Review `send_at`, draft defaults and explicit confirmation before any delivery or audience change.
 - Never copy old personal SKILL content, cookies or the private Git history into public files.
 
-## License
+## 20. FAQ
 
-This wrapper is **AGPL-3.0-or-later**, preserving the legacy source's license. See [LICENSE](./LICENSE) and the full [AGPL text](./licenses/AGPL-3.0.txt). Kit's service and documentation retain their own rights and terms. Third-party dependency attribution is in [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
+<details>
+<summary><b>Is Kit free to use here?</b></summary>
 
+The wrapper is free AGPL software. Your Kit subscription and API eligibility are separate. The official Kit MCP is available on paid Creator and Creator Pro plans; consult Kit for your account’s API access.
+
+</details>
+
+<details>
+<summary><b>Does Kit already have an official MCP?</b></summary>
+
+Yes. Its account server supports reads and writes across v4. Its separate developer-docs MCP reads documentation and cannot act on your account.
+
+</details>
+
+<details>
+<summary><b>Why use this if the official one exists?</b></summary>
+
+Use it for standalone task commands, shell automation, private named-account settings, token-file refresh, bounded pagination or a local desktop archive. Use Kit’s official server for Kit-managed hosted OAuth. Neither is declared universally better.
+
+</details>
+
+<details>
+<summary><b>Is there an official Kit CLI?</b></summary>
+
+No standalone email-account task CLI was identified in the official developer surfaces reviewed on 2026-10-02. Framework-specific and data-provider CLIs exist; see COMPARISON.md.
+
+</details>
+
+<details>
+<summary><b>Are all 85 tools available with an API key?</b></summary>
+
+Discovery shows them, but OAuth-only bulk and purchase endpoints reject API-key calls before HTTP. The tool table marks them. Use an authorized OAuth session for those operations.
+
+</details>
+
+<details>
+<summary><b>Do I need to give the AI my key?</b></summary>
+
+No. Configure it privately in your shell or client settings. Help, discovery and schemas work without it.
+
+</details>
+
+<details>
+<summary><b>Does login sign me in?</b></summary>
+
+No. It explains first-time key/OAuth setup. This package does not host a consent flow or copy your browser cookies.
+
+</details>
+
+<details>
+<summary><b>Can I use Claude Desktop?</b></summary>
+
+Yes, through local stdio configuration or the custom .mcpb release. GUI installation of this version remains a separate host check.
+
+</details>
+
+<details>
+<summary><b>Can I use ChatGPT on the web?</b></summary>
+
+This local package does not expose an HTTPS connector. Use Kit’s official remote MCP for a compatible web connector.
+
+</details>
+
+<details>
+<summary><b>Will creating a broadcast immediately send it?</b></summary>
+
+The wrapper defaults create to private and unscheduled. If you explicitly pass send_at or publication fields, they can change that behavior. All broadcast writes require confirmation; review in Kit before delivery.
+
+</details>
+
+<details>
+<summary><b>Is published_at the schedule time?</b></summary>
+
+No. Use send_at for email delivery. published_at concerns web publication.
+
+</details>
+
+<details>
+<summary><b>How do I clear a schedule?</b></summary>
+
+Use update_broadcast with a JSON body containing send_at:null, then inspect the broadcast. A shell string null is not JSON null.
+
+</details>
+
+<details>
+<summary><b>Can I preserve my designed email template?</b></summary>
+
+Inspect existing template HTML and required Liquid/footer markup before changing content. The API is not a visual block editor. Starting point schema conflicts remain live-account validation pending.
+
+</details>
+
+<details>
+<summary><b>Can tags send email indirectly?</b></summary>
+
+Yes, existing automations can react to tagging, form subscription or sequence enrollment. Those operations require explicit confirmation here.
+
+</details>
+
+<details>
+<summary><b>Will the CLI retry a failed send?</b></summary>
+
+No. Mutating requests are never automatically retried. A timeout may have an unknown outcome; inspect the account first.
+
+</details>
+
+<details>
+<summary><b>Can I connect multiple accounts?</b></summary>
+
+Yes. Use a private KIT_ACCOUNTS array with unique names, then --account. list_accounts returns labels/auth methods without credentials.
+
+</details>
+
+<details>
+<summary><b>How do I retrieve more than one page?</b></summary>
+
+Use after or bounded all_pages/max_items. v4 uses cursors. Aggregate output exposes the last cursor and truncation; it is not an unlimited export.
+
+</details>
+
+<details>
+<summary><b>Where do webhook secrets go?</b></summary>
+
+New signed endpoint secrets go to exclusive owner-only files under KIT_PRIVATE_DIR and are redacted from returned tool data. Configure your own receiver privately.
+
+</details>
+
+<details>
+<summary><b>Is it more token-efficient than official MCP?</b></summary>
+
+That has not been measured. Model context, discovery, skill, command help, results, cache and task length all matter. No invented savings are advertised.
+
+</details>
+
+<details>
+<summary><b>Can I migrate my old private setup?</b></summary>
+
+Create new private settings with a v4 key or authorized OAuth token file. Do not copy old personal SKILL content, cookies or source history into a public repo. See the 2.0 migration notes.
+
+</details>
+
+## Questions
+
+Open an [issue](https://github.com/thenavidm/kit-mcp-cli/issues) with the version, client and a sanitized reproduction. Report security problems privately through [SECURITY.md](SECURITY.md).
 
 ## About the author
 
@@ -1963,6 +2113,20 @@ Navid Moazzez is a leading AI business strategist, and the host of the AI Creato
 - X: [@thenavidm](https://x.com/thenavidm)
 - Instagram: [@thenavidm](https://instagram.com/thenavidm)
 - LinkedIn: [thenavidm](https://linkedin.com/in/thenavidm)
+
+## Dependencies
+
+| Dependency | Version range | Used for |
+| --- | --- | --- |
+| `@modelcontextprotocol/sdk` | `^1.31.0` | MCP protocol and shared CLI bridge |
+| `ajv` | `^8.17.1` | JSON Schema input validation |
+| `ajv-formats` | `^3.0.1` | JSON Schema input validation |
+
+Full third-party attribution is in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Development tooling and its audit limitations are documented in [SECURITY.md](SECURITY.md).
+
+## License
+
+This wrapper is **AGPL-3.0-or-later**, preserving the legacy source's license. See [LICENSE](./LICENSE) and the full [AGPL text](./licenses/AGPL-3.0.txt). Kit's service and documentation retain their own rights and terms. Third-party dependency attribution is in [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
 
 ---
 

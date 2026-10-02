@@ -2,13 +2,21 @@
 
 Versions follow semantic versioning. Release tags are annotated v<version> and desktop archives track the npm package version. Dates are UTC.
 
-## 2.0.1 — 2026-10-02
+## 2.0.2 - 2026-10-02
+
+- Match the established Bluesky/Firefly README structure: two surfaces, feature table, numbered contents, setup and verification, updates/removal, dependencies and questions.
+- Render all 20 FAQs as expandable details/summary accordions.
+- Preserve the complete 85-tool argument reference and current official/community comparisons.
+- Return documented exit code 10 for invalid private configuration through doctor and the CLI router; add four real-binary regression checks.
+- Align npm, desktop manifest and documented bundle version. API tool behavior is unchanged from 2.0.1.
+
+## 2.0.1 - 2026-10-02
 
 - Fix the rendered full argument catalog: table rows now stay contiguous Markdown instead of being separated by blank paragraphs.
 - Runtime/API behavior is unchanged from 2.0.0.
 - Ship the fixed README in npm and the matching desktop bundle; the current release is 2.0.1.
 
-## 2.0.0 — 2026-10-02
+## 2.0.0 - 2026-10-02
 
 ### Added
 
@@ -43,6 +51,6 @@ Versions follow semantic versioning. Release tags are annotated v<version> and d
 - Live authorized Kit reads/writes, Starting point templates, an actual desktop GUI installation and matched model-token/task comparisons remain pending.
 - Clean npm-package installation, bundled desktop discovery and public source/artifact secret scans are checked separately from registry publication. Live registry/release proof is recorded after publication.
 
-## 1.0.0 — private legacy source
+## 1.0.0 - private legacy source
 
 The earlier account repository provided a 31-tool MCP and private browser/account workflows. Its original history and personal setup remain private. It had no equivalent house task CLI or complete current v4 schema coverage. This entry records migration context and does not expose private history or claim a public v1 npm release.

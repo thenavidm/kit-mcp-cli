@@ -38,7 +38,7 @@ async function openServer(): Promise<{ server: { connect: (t: never) => Promise<
 }
 
 /** This server's own error words, checked before the generic ones. */
-const EXIT_WORDS: [RegExp, number][] = [[/invalid arguments|unsupported kit|pagination|payload_file|secret_name/i,2],[/oauth is required|oauth token|oauth refresh/i,4],[/unknown account|private kit tokens file/i,10]];
+const EXIT_WORDS: [RegExp, number][] = [[/invalid arguments|unsupported kit|pagination|payload_file|secret_name/i,2],[/oauth is required|oauth token|oauth refresh/i,4],[/unknown account|private kit tokens file|invalid settings|KIT_ACCOUNTS|Kit account (?:requires|names)/i,10]];
 
 /* ------------------------------------------------ The same in every repo */
 
