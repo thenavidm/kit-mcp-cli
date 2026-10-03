@@ -15,7 +15,7 @@ One package gives you two ways in: `kit-mcp` connects the tools to your AI app, 
 
 Built and maintained by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=referral&utm_campaign=kit-mcp-cli&utm_content=readme). The installation guide is in [INSTALL.md](INSTALL.md); the full matching navid.me guide is saved as a CMS draft and awaits publication.
 
-<img src="https://cdn.navid.me/repos/kit-mcp-cli.gif" alt="Illustrated Kit workflow in the same terminal component used on navid.me" width="520">
+<img src="https://cdn.navid.me/repos/kit-mcp-cli-retina.gif" alt="Illustrated Kit workflow in the same terminal component used on navid.me" width="520">
 
 The terminal illustrates shipped tool names and the requested draft workflow. It is a presentation preview, not a live account transcript.
 
