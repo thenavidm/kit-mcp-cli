@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 2.0.3, 2026-10-04
+
+- **`npx -y @thenavidm/kit-mcp-cli` always starts the MCP server.** npx starts whichever binary the npm registry lists first when they share one file, and the registry does not keep the published order, so an MCP client set up with this README's install line could get `kit-cli` and its command list instead of a server. A third binary named after the package now always starts the server, and npx picks it by name.
 
 Use the native terminal capture at 1040 source pixels with lossless GIF optimization, displayed at 520 pixels, matching the Bluesky/Substack reference. Original assets remain available.
 
