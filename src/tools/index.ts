@@ -5,12 +5,14 @@ import { readFile, lstat } from "node:fs/promises";
 import type { Json, KitClient } from "../api/client.js";
 import { UsageError } from "../api/errors.js";
 import type { Config } from "../config.js";
-import type { Risk } from "../safety.js";
+import type { Risk } from "@thenavidm/slipway";
 export type Operation={name:string;title:string;description:string;method:string;path:string;group:string;risk:Risk;oauthOnly:boolean;params:{name:string;key:string;in:string;required?:boolean;schema:Json}[];bodySchema:Json};
 export type ToolSpec={name:string;title:string;description:string;group:string;inputSchema:Json;risk:Risk;handler:(args:Json,client:KitClient)=>Promise<unknown>};
 const operations=operationsData as unknown as Operation[];
 const ajv=new Ajv({allErrors:true,strict:false});(addFormats as unknown as(a:Ajv)=>void)(ajv);
 function check(validate:ValidateFunction,args:unknown):void {if(!validate(args))throw new UsageError(ajv.errorsText(validate.errors,{separator:"; "}));}
+// Each schema compiles on first use and is kept: 2.x compiled a body's schema again on every call, and every input schema at load. compileAll() runs them in tests.
+const bodyValidators=new Map<string,ValidateFunction>();function bodyValidator(op:Operation):ValidateFunction{let v=bodyValidators.get(op.name);if(!v){v=ajv.compile(op.bodySchema!);bodyValidators.set(op.name,v);}return v;}
 function fieldsFor(op:Operation):Json {
  const properties:Json=Object.fromEntries(op.params.map(p=>[p.key,p.schema]));
  Object.assign(properties,op.bodySchema.properties??{});
@@ -40,7 +42,7 @@ async function execute(op:Operation,args:Json,client:KitClient):Promise<unknown>
   body=JSON.parse(await readFile(args.payload_file,"utf8"));
  }catch {throw new UsageError("payload_file must be a regular JSON file, at most 5 MB.");}
  if(op.name==="create_broadcast")body={public:false,send_at:null,...body};
- check(ajv.compile(op.bodySchema),body);
+ check(bodyValidator(op),body);
  if(["update_broadcast","update_sequence","update_sequence_email","update_snippet","update_webhook_endpoint"].includes(op.name)&&!Object.keys(body).length)throw new UsageError("Provide at least one field to update.");
  if(args.after&&args.before)throw new UsageError("Use after or before, not both.");
  if(args.all_pages&&args.before)throw new UsageError("all_pages traverses forward; use after rather than before.");
@@ -80,6 +82,7 @@ export const ALL_TOOLS:ToolSpec[]=operations.map(op=>({name:op.name,title:op.tit
 const search=ALL_TOOLS.find(t=>t.name==="list_subscribers")!;
 ALL_TOOLS.push({...search,name:"search_subscribers",title:"Find subscribers by exact email",description:"Compatibility alias for list_subscribers with a required exact email_address filter.",inputSchema:{...search.inputSchema,required:["email_address"]}},
  {name:"list_accounts",title:"List configured accounts",description:"List private account labels and configured auth methods, without returning credentials or token-file paths. Does not contact Kit.",group:"account",risk:"read",inputSchema:{type:"object",properties:{},additionalProperties:false},handler:async(_args,client)=>({accounts:client.config.accounts.map(a=>({name:a.name,default:a.name===client.config.defaultAccount,auth:a.tokensFile||a.accessToken?"oauth":a.apiKey?"api_key":"not_configured"}))})});
-const validators=new Map(ALL_TOOLS.map(t=>[t.name,ajv.compile(t.inputSchema)]));
-export function validateArguments(tool:ToolSpec,args:Json):void {check(validators.get(tool.name)!,args);}
+const validators=new Map<string,ValidateFunction>();function validatorFor(tool:ToolSpec):ValidateFunction{let v=validators.get(tool.name);if(!v){v=ajv.compile(tool.inputSchema);validators.set(tool.name,v);}return v;}export function validateArguments(tool:ToolSpec,args:Json):void {check(validatorFor(tool),args);}
+/** Compile every input and body schema, as loading once did, so a test can prove they all compile. */
+export function compileAll():number{for(const t of ALL_TOOLS)validatorFor(t);for(const o of operations)if(o.bodySchema)bodyValidator(o);return validators.size+bodyValidators.size;}
 export function visibleTools(config:Config):ToolSpec[] {return ALL_TOOLS.filter(t=>!config.readOnly||t.risk==="read");}

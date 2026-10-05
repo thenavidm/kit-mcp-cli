@@ -32,6 +32,6 @@ The current snapshot's create/update broadcast required lists contradict draft/t
 
 ## MCP versus CLI measurement protocol
 
-No fresh model-token/task measurements are available. Compare baseline, eager MCP, normal deferred MCP, CLI with registered skill, and official MCP on the same client/model/account/date. Record success, standing context, input/output/cache/reasoning/help/result tokens, latency and request count separately. Fix result selection and task scope. Reading five recent broadcasts with statistics is a useful first read task; draft writes require an approved test account and equal resulting state. No setup task should send newsletters.
+README section 7 has this package's measured Claude Code and Codex costs against 2.0.3. No other offering was measured, so no comparison with one is claimed. To compare with the official MCP, measure baseline, eager MCP, normal deferred MCP, CLI with registered skill, and official MCP on the same client/model/account/date. Record success, standing context, input/output/cache/reasoning/help/result tokens, latency and request count separately. Fix result selection and task scope. Reading five recent broadcasts with statistics is a useful first read task; draft writes require an approved test account and equal resulting state. No setup task should send newsletters.
 
 Schema text size or number of tools alone is not a model-token benchmark. Historical numbers from another package/client are not this release's measured savings.

@@ -25,7 +25,7 @@ kit-cli get-broadcast-stats --broadcast-id 123 --agent
 
 ## Audience and delivery
 
-All 40 guarded operations require --confirm for the action explicitly requested by the user. --yes/--agent never authorize a write. Tags, forms and sequences can trigger existing automations. Read-only mode blocks all 47 writes. Respect KIT_ALLOW_DESTRUCTIVE=0; never change policy to bypass a refusal.
+All 40 guarded operations require --confirm for the action explicitly requested by the user. --yes/--agent never authorize a write. Tags, forms and sequences can trigger existing automations. Read-only mode blocks all 47 writes. Respect KIT_ALLOW_DESTRUCTIVE=0; never change policy to bypass a refusal. Over MCP the person approves each in the client's own prompt or form; confirm:true counts only where the client cannot ask. kit-cli which <words> finds the command for a task. Exit codes: 0 ok, 1 unexpected error, 2 usage, a safety refusal, an unknown command or a hidden write, 3 not found, 4 auth, 5 API or network, 7 rate limited, 10 not configured.
 
 Create broadcast defaults private/unscheduled, but still needs confirmation. Review existing draft and audience before scheduling. send_at is delivery; published_at is web publication. Do not treat draft creation success as sent email.
 

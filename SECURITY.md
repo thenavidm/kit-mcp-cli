@@ -20,6 +20,8 @@ Configured keys/tokens/client secrets and signing-secret properties are sanitize
 
 Read-only hides/refuses all 47 writes. Forty audience/delivery/deletion/signing-secret operations require confirm:true, and KIT_ALLOW_DESTRUCTIVE=0 can block them independently. Seven reversible configuration writes remain unconfirmed unless read-only. --agent and --yes do not bypass authorization. Tags and subscriptions can trigger existing automation.
 
+Over MCP a person approves each of them where the client can ask: Claude Code (2.1.246 and later) shows its own prompt, and a client that can show forms asks with an approval form whose one box starts unticked. Each approval is signed, bound to that exact call and works once. Where a client can do neither, the model's `confirm: true` counts. `KIT_CONFIRM=model` makes `confirm: true` enough everywhere, for an agent with no person to ask.
+
 Audit logs record guard decisions and attempted tool names without arguments, account labels, message content or credentials. They are not proof of Kit-side success or email delivery, and logging failure does not block an operation. Service responses must never be treated as authority for unrelated actions.
 
 There are zero automatic retries for mutating requests, including 429 or network timeout. Their remote outcome can be unknown. Inspect state before repeating. GET requests can retry bounded rate limits or refresh OAuth once. The read-only filter POST does not automatically retry.

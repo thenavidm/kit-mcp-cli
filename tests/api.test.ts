@@ -3,20 +3,30 @@ import {describe,it,expect,vi} from "vitest";
 import {loadConfig} from "../src/config.js";
 import {KitClient} from "../src/api/client.js";
 import {ALL_TOOLS,validateArguments} from "../src/tools/index.js";
-import {buildServer} from "../src/server.js";
+import {createApp} from '../src/app.js';import {cli,connect as slipwayConnect} from '@thenavidm/slipway/testing';
 import {Client} from "@modelcontextprotocol/sdk/client/index.js";
 import {InMemoryTransport} from "@modelcontextprotocol/sdk/inMemory.js";
 import {mkdtemp,writeFile,readFile,stat,symlink} from "node:fs/promises";
 import {tmpdir} from "node:os";
 import {join} from "node:path";
+
+/** The write policy comes from the environment on Slipway, as it does in use: this is the one a config describes. */
+function policy(prefix:string,config:{readOnly?:boolean;allowDestructive?:boolean;auditPath?:string}):Record<string,string>{return{...(config.readOnly?{[`${prefix}_READ_ONLY`]:'1'}:{}),...(config.allowDestructive===false?{[`${prefix}_ALLOW_DESTRUCTIVE`]:'0'}:{}),...(config.auditPath?{[`${prefix}_AUDIT_LOG`]:config.auditPath}:{})};}
+/** Slipway's schema check answers in the MCP SDK's own plain text, "Input validation error: …"; these tests read every error as JSON, so it is wrapped as {error}. */
+function jsonError(r:any){const text=r.content?.[0]?.text??'';try{JSON.parse(text);return r;}catch{return{...r,content:[{type:'text',text:JSON.stringify({error:text})}]};}}
+/** The SDK client's calls these tests were written against, over the real Slipway server. A hidden tool is a protocol error there; it comes back as the error result a client sees. */
+function adapt(mcp:Awaited<ReturnType<typeof slipwayConnect>>){return{listTools:async()=>({tools:await mcp.listTools()}),callTool:async({name,arguments:args}:{name:string;arguments?:Record<string,unknown>}):Promise<any>=>{try{const r:any=await mcp.callTool(name,args??{});return r.isError?jsonError(r):r;}catch(e){return{isError:true,content:[{type:'text',text:JSON.stringify({error:(e as Error).message})}]};}},close:()=>mcp.close()};}
+/** One tool call through the real server, as the 2.x guard-and-handler helper made it: the result's data, or its error thrown. */
+async function viaServer(prefix:string,config:any,client:any,name:string,args:Record<string,unknown>):Promise<any>{const mcp=await slipwayConnect(createApp({context:()=>({config,client})}),{env:policy(prefix,config)});try{const r:any=await mcp.callTool(name,args);const text=(r.content as any[])?.[0]?.text??'';if(r.isError)throw new Error(text);try{return JSON.parse(text);}catch{return text;}}finally{await mcp.close();}}
 const cfg=()=>loadConfig({KIT_API_KEY:"test-private-key",KIT_MIN_REQUEST_INTERVAL_MS:"1",KIT_MAX_RETRIES:"1"});
 const json=(data:unknown,status=200,headers:Record<string,string>={})=>new Response(JSON.stringify(data),{status,headers});
 const tool=(name:string)=>ALL_TOOLS.find(t=>t.name===name)!;
 async function connection(c=cfg(),f=vi.fn().mockResolvedValue(json({})),surface:"mcp"|"cli"="mcp") {
- const server=buildServer(c,new KitClient(c,f,async()=>{}),surface);
- const transports=InMemoryTransport.createLinkedPair();
- await server.connect(transports[1]);const client=new Client({name:"tests",version:"1"});await client.connect(transports[0]);
- return {client,close:async()=>{await client.close();await server.close();}};
+ // Slipway words a refusal for the surface it is on, so the CLI case runs the real CLI.
+ const app=createApp({context:()=>({config:c,client:new KitClient(c,f,async()=>{})})});
+ if(surface==="cli")return{client:{callTool:async({name,arguments:args}:{name:string;arguments:Record<string,unknown>})=>{const run=await cli(app,[name.replace(/_/g,"-"),...Object.entries(args).flatMap(([k,v])=>[`--${k.replace(/_/g,"-")}`,String(v)]),"--agent"],{env:policy("KIT",c)});return{isError:run.code!==0,content:[{type:"text",text:run.code===0?run.stdout:run.stderr}]};}},close:async()=>{}};
+ const mcp=await slipwayConnect(app,{env:policy("KIT",c)});
+ return {client:adapt(mcp),close:()=>mcp.close()};
 }
 describe("Kit v4 request contracts",()=>{
  it("uses cursor pagination and includes total counts without exposing the API key",async()=>{
@@ -76,9 +86,14 @@ describe("authentication and network safety",()=>{
 describe("MCP and CLI share real safety",()=>{
  it("starts and discovers tools without any credentials",async()=>{const c=await connection(loadConfig({}));try{expect((await c.client.listTools()).tools).toHaveLength(85);}finally{await c.close();}});
  it.each(["mcp","cli"] as const)("refuses an unconfirmed audience write on %s",async(surface)=>{const f=vi.fn();const c=await connection(cfg(),f,surface);try{const r=await c.client.callTool({name:"tag_subscriber",arguments:{tag_id:2,email_address:"reader@example.com"}});expect(r.isError).toBe(true);expect(JSON.stringify(r)).toContain(surface==="cli"?"--confirm":"confirm: true");expect(f).not.toHaveBeenCalled();}finally{await c.close();}});
- it("hides writes and audits blocked direct calls without subscriber data",async()=>{
-  const audit=join(await mkdtemp(join(tmpdir(),"kit-audit-")),"audit.jsonl");const f=vi.fn();const c=await connection({...cfg(),readOnly:true,auditPath:audit},f);
-  try{expect((await c.client.listTools()).tools).toHaveLength(38);const r=await c.client.callTool({name:"tag_subscriber",arguments:{tag_id:2,email_address:"reader@example.com",confirm:true}});expect(r.isError).toBe(true);const log=await readFile(audit,"utf8");expect(log).toContain("blocked: read-only");expect(log).not.toContain("reader@example.com");expect(log).not.toContain("test-private-key");expect(f).not.toHaveBeenCalled();}finally{await c.close();}
+ // Slipway hides a write in read-only mode, so a direct call over MCP is "not found" and is not audited; a write
+ // refused under KIT_ALLOW_DESTRUCTIVE=0 is, and its audit line still carries no subscriber data.
+ it("hides writes, refuses a direct call, and audits a blocked one without subscriber data",async()=>{
+  const audit=join(await mkdtemp(join(tmpdir(),"kit-audit-")),"audit.jsonl");const f=vi.fn();
+  const hidden=await connection({...cfg(),readOnly:true,auditPath:audit},f);
+  try{expect((await hidden.client.listTools()).tools).toHaveLength(38);const r=await hidden.client.callTool({name:"tag_subscriber",arguments:{tag_id:2,email_address:"reader@example.com",confirm:true}});expect(r.isError).toBe(true);expect(JSON.stringify(r)).toMatch(/READ_ONLY|not found/);}finally{await hidden.close();}
+  const blocked=await connection({...cfg(),allowDestructive:false,auditPath:audit},f);
+  try{const r=await blocked.client.callTool({name:"tag_subscriber",arguments:{tag_id:2,email_address:"reader@example.com",confirm:true}});expect(r.isError).toBe(true);const log=await readFile(audit,"utf8");expect(log).toContain("blocked");expect(log).not.toContain("reader@example.com");expect(log).not.toContain("test-private-key");expect(f).not.toHaveBeenCalled();}finally{await blocked.close();}
  });
  it("saves newly created webhook secrets privately and keeps them out of MCP output",async()=>{
   const dir=await mkdtemp(join(tmpdir(),"kit-signing-"));const f=vi.fn().mockResolvedValue(json({webhook_endpoint:{id:1,secret:"test-signing-secret"}}));const c=await connection({...cfg(),privateDir:dir},f);

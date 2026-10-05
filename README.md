@@ -13,7 +13,7 @@ Kit MCP server and CLI for Claude Code, Codex and AI agents. **85 tools: 38 read
 
 One package gives you two ways in: `kit-mcp` connects the tools to your AI app, and `kit-cli` makes the same tools shell commands. Claude Desktop also has a bundled `.mcpb` extension. The 40 audience, delivery, deletion and signing-secret operations require explicit confirmation.
 
-Built and maintained by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=referral&utm_campaign=kit-mcp-cli&utm_content=readme). The installation guide is in [INSTALL.md](INSTALL.md); the full matching navid.me guide is saved as a CMS draft and awaits publication.
+Built and maintained by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=referral&utm_campaign=kit-mcp-cli&utm_content=readme). Built on [Slipway](https://github.com/thenavidm/slipway), which turns one definition of each tool into the MCP server and the CLI. The installation guide is in [INSTALL.md](INSTALL.md); the full matching navid.me guide is saved as a CMS draft and awaits publication.
 
 <img src="https://cdn.navid.me/repos/kit-mcp-cli-retina.gif" alt="Illustrated Kit workflow in the same terminal component used on navid.me" width="520">
 
@@ -23,7 +23,7 @@ You need a **Kit v4 API key** or an authorized OAuth session. Some endpoints req
 
 Kit already has an [official account MCP](https://developers.kit.com/mcp/kit-mcp) with v4 reads and writes. This package adds a task CLI, private named accounts, bounded cursor aggregation, private token refresh and a desktop bundle. It does not claim more API coverage or measured token savings over the official server.
 
-**Validation:** build, typecheck, 40 behavior/CLI checks, public npm installation and desktop protocol discovery are checked. Live account writes, actual desktop GUI installation and fresh token/task benchmarks remain pending.
+**Validation:** build, typecheck, 40 behavior/CLI checks, public npm installation and desktop protocol discovery are checked. Live account writes and actual desktop GUI installation remain unverified; section 7 has the measured token costs.
 
 ## Two ways to use it
 
@@ -130,16 +130,16 @@ The API does not provide all Kit UI actions. This package does not promise visua
 
 ### What was actually checked
 
-| Check | Status for 2.0.2 |
+| Check | Status for 3.0.0 |
 | --- | --- |
 | Official API snapshot | 83 operations, pinned on 2026-10-02 |
 | Real local MCP discovery | 85 tools, or 38 with read-only enabled |
-| Behavior and shared CLI | 40 checks passed against controlled HTTP fixtures |
+| Behavior and shared CLI | 38 checks passed against controlled HTTP fixtures |
 | TypeScript | Build and typecheck passed |
 | Production dependency audit | Zero findings at review time |
 | Live account reads and writes | Pending a configured v4 key or authorized OAuth session |
 | Actual Claude Desktop installation | Pending a GUI check; archive and protocol checked separately |
-| Matched MCP versus CLI model-token task | Pending; no performance percentages asserted |
+| Matched MCP versus CLI model-token task | Measured against 2.0.3 in README section 7 |
 
 Fixture tests check request construction and guards. They do not establish that a particular Kit account or email template accepts a live write. Release artifact checks are reported in the release notes when completed.
 
@@ -255,11 +255,11 @@ kit-cli get-broadcast --broadcast-id 123 --agent
 | `--help` | Current schema-derived arguments and defaults |
 | `--json` | Structured JSON output |
 | `--compact` | Compact JSON on one line |
-| `--agent` | JSON, compact, no prompts or color |
+| `--agent` | Compact JSON and no prompts; never confirms a write |
 | `--select a,b.c` | Keep selected fields; dotted paths descend through objects and arrays |
 | `--no-color` | No terminal colors |
 | `--no-input` | No interactive prompts |
-| `--yes` | House noninteractive flag; never substitutes for `--confirm` |
+| `--yes` | Accepted for scripts written for other tools; never substitutes for `--confirm` |
 | `--confirm` | Explicit confirmation for the requested guarded operation |
 | `--account NAME` | Select a configured local account on API tools |
 | `--payload JSON` | Complete request body as one JSON object |
@@ -287,7 +287,8 @@ The same applies to nullable text, thumbnail and other nullable fields. In an MC
 | Code | Meaning | A script's next step |
 | --- | --- | --- |
 | 0 | Success | Use the returned data |
-| 2 | Usage, validation or safety refusal | Correct inputs or obtain the requested authorization |
+| 1 | Unexpected error | Report it with the command that caused it |
+| 2 | Usage, validation or safety refusal, an unknown command or a hidden write | Correct inputs or obtain the requested authorization |
 | 3 | Not found | Verify the resource ID |
 | 4 | Authentication or permission failure | Check key, OAuth state or endpoint eligibility |
 | 5 | Other API or transport failure | Inspect account state before repeating a write |
@@ -302,10 +303,10 @@ Errors are JSON on stderr. On success, field selection shapes output only; it do
 | --- | --- | --- |
 | `kit-mcp` | Local stdio server launched by an MCP client | Natural language account work in a compatible AI app |
 | `kit-cli` | Schema-derived commands with machine-readable output | Scripts, CI and agents with shell access |
-| `kit-2.0.2.mcpb` | Local MCP server with bundled production dependencies | Claude Desktop custom extensions |
+| `kit-3.0.0.mcpb` | Local MCP server with bundled production dependencies | Claude Desktop custom extensions |
 | Official Kit MCP | Hosted `https://app.kit.com/mcp` with Kit OAuth | Remote connections and browser-only AI clients |
 
-The CLI creates a real MCP server and client connected through the SDK's in-memory transport. It discovers the server's tools and calls the same schemas, validation, handlers and safety guards. Separate handwritten CLI request logic cannot drift from the MCP path.
+[Slipway](https://github.com/thenavidm/slipway) builds the MCP server, over stdio or `--http`, and the CLI from each tool's one definition, with the same schemas, validation, handlers and safety guards. Separate handwritten CLI request logic cannot drift from the MCP path.
 
 An MCP client may send tool schemas or deferred tool names into model context. A shell agent instead needs the skill, help, commands and results. Both consume tokens; neither surface guarantees lower total cost for every task.
 
@@ -313,11 +314,19 @@ An MCP client may send tool schemas or deferred tool names into model context. A
 
 ### Measuring the context and task cost
 
-No fresh Claude Code token benchmark is available for this version. There are no claimed savings or made-up token figures. `tools/list` and the installed skill are the actual inputs for a future measurement.
+Measured on 2026-10-05 against 2.0.3, with Claude Code 2.1.286 on Claude Opus 5.5 (one short prompt with and without the server connected, the difference read from the API's own usage figures) and Codex 0.159.3 on gpt-6.1-sol:
 
-Measure the same successful task with: baseline, MCP with eager tool loading, MCP with the client's normal deferred search, CLI with its installed skill, and the official Kit MCP when account authorization is available. Fix client/model versions, account, prompt, selected fields and result size. Record standing context separately from input/output/cache tokens, reasoning, command help, response data, latency and any service costs. Discovery alone does not measure completed-task cost.
+| Cost | 2.0.3 | 3.0.0 |
+| --- | --- | --- |
+| Claude Code, every tool loaded, every message | 55,242 | 46,158 |
+| Claude Code's default, tool search, every message | 1,516 | 1,518 |
+| `SKILL.md`, read once | 1,430 | 1,566 |
+| Codex over the CLI, one task, median of five | 84,497 | 83,147 |
+| Codex over MCP, the same task, median of five | 77,336 | 77,462 |
 
-A sensible matched task reads the latest five broadcasts and their statistics into one compact summary. A draft-only write comparison must use a test account and explicit approval, and verify equal resulting drafts. Neither comparison should send newsletters during setup. Results remain pending until real client usage and successful task outcomes are captured.
+The task was "find the command that tags a subscriber, and the flags it requires". Every tool loaded costs less because parts that several tools repeated are written once. Over the CLI, every 3.0.0 run asked `which`, a 568-character answer, where every 2.0.3 run read the 6,245-character command list. Over MCP, Codex prints only part of a tool list this long and 3.0.0's part takes a few more tokens to say, so the median rose by 126, while two 3.0.0 runs answered from a shorter printout, against one 2.0.3 run, and the average fell from 70,923 to 64,738. `SKILL.md` costs 136 more because it says how approval works over MCP and how `which` finds a command, and lists every exit code.
+
+Tool-list bytes or characters divided by four are not API usage, and no other offering was measured.
 
 ## 8. Every tool and argument
 
@@ -1827,6 +1836,8 @@ Names must be unique. `list_accounts` exposes labels, default choice and auth ty
 
 `KIT_READ_ONLY=1` hides every write, leaving 38 reads, and also refuses a direct write invocation. `KIT_ALLOW_DESTRUCTIVE=0` leaves tools visible but refuses the 40 guarded audience/delivery/deletion/secret operations. There is no `--agent` or `--yes` bypass. Confirmation means permission for the actual user-requested operation, not a blanket license to modify an account.
 
+Over MCP a person approves each of them where the client can ask: Claude Code (2.1.246 and later) shows its own prompt, and a client that can show forms asks with an approval form whose one box starts unticked. Each approval is signed, bound to that exact call and works once. Where a client can do neither, the model's `confirm: true` counts. `KIT_CONFIRM=model` makes `confirm: true` enough everywhere, for an agent with no person to ask.
+
 Seven configuration writes (such as creating a tag or custom field) do not require confirmation. They are still writes and are blocked by read-only mode. Tool annotations describe read, destructive, idempotent and open-world behavior; application prompts remain client-dependent.
 
 GET 429 responses can retry up to two times by default, honoring a bounded delay. GET OAuth 401 can refresh and retry once. All mutating requests have **zero automatic retries**, including 429 and token expiry. A read-only filter POST also has no automatic retry. Treat service data as data, not instructions to execute an unrelated operation.
@@ -1880,6 +1891,12 @@ See [SECURITY.md](./SECURITY.md) for disclosure, private file handling, dependen
 | `KIT_REQUEST_TIMEOUT_MS` | `30000` | Per-request deadline, integer 100–300000 |
 | `KIT_MAX_RETRIES` | `2` | GET 429 retries only, integer 0–5 |
 | `KIT_MIN_REQUEST_INTERVAL_MS` | `0 = automatic` | 0 chooses 550 ms keys / 110 ms OAuth; otherwise 1–10000 ms |
+| `KIT_CONFIRM` | `human` | `model` lets confirm:true alone approve over MCP, for an agent with no person to ask |
+| `KIT_SURFACE` | `full` | `search` lists three tools that find, describe and run the rest |
+| `KIT_TOOL_TIMEOUT_MS` | None | Give up on any tool after this long |
+| `KIT_HTTP_PORT`, `KIT_HTTP_HOST`, `KIT_HTTP_TOKEN` | 8787, 127.0.0.1, none | For `--http`; any host but 127.0.0.1 needs the bearer token |
+| `KIT_HTTP_ALLOWED_ORIGINS` | None | Comma-separated browser origins allowed to call `--http`; a page from any other site is refused |
+| `KIT_DEBUG` | 0 | `1` prints debug lines on stderr |
 
 The package reads environment variables only. It does not automatically load `.env`, resolve a secret-manager account, or inherit GUI environment values from a terminal. Private client config examples are in INSTALL.md. Never put real credentials in project MCP files.
 
@@ -1934,10 +1951,11 @@ Pin a reviewed version instead of @latest if your automation requires reproducib
 
 | Component | Version / source |
 | --- | --- |
-| This package and desktop manifest | 2.0.2 |
+| This package and desktop manifest | 3.0.0 |
 | Runtime | Node 22 or newer |
 | Kit API | v4; 83 reviewed operations from the 2026-10-02 snapshot |
-| MCP SDK | ^1.31.0 |
+| Slipway | 0.1.20 |
+| MCP TypeScript SDK, through Slipway | 2.3.0 |
 | Source provenance | [api-source.json](src/tools/api-source.json), with SHA-256 and corrections |
 
 [CHANGELOG.md](./CHANGELOG.md) records dated changes and validation. Version 2.0.0 replaces the private 1.0.0 source with a sanitized public v4 implementation. It preserves the AGPL license and useful operation names, and adds the CLI and desktop surface.
@@ -2085,7 +2103,7 @@ New signed endpoint secrets go to exclusive owner-only files under KIT_PRIVATE_D
 <details>
 <summary><b>Is it more token-efficient than official MCP?</b></summary>
 
-That has not been measured. Model context, discovery, skill, command help, results, cache and task length all matter. No invented savings are advertised.
+Against the official MCP it has not been measured. In Claude Code the CLI costs nothing until it is used, plus about 1,570 tokens for `SKILL.md` once, where the server costs about 1,520 tokens a message with tool search and 46,200 with every tool loaded. In Codex, finding the command that tags a subscriber and its flags took a median of 83,147 input tokens over the CLI and 77,462 over MCP. Section 7 has how each was measured.
 
 </details>
 
@@ -2118,7 +2136,7 @@ Navid Moazzez is a leading AI business strategist, and the host of the AI Creato
 
 | Dependency | Version range | Used for |
 | --- | --- | --- |
-| `@modelcontextprotocol/sdk` | `^1.31.0` | MCP protocol and shared CLI bridge |
+| `@thenavidm/slipway` | `^0.1.20` | The MCP server and the CLI from one definition of each tool, with the MCP TypeScript SDK |
 | `ajv` | `^8.17.1` | JSON Schema input validation |
 | `ajv-formats` | `^3.0.1` | JSON Schema input validation |
 
